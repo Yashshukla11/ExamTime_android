@@ -3,30 +3,54 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:io';
+import 'package:open_file/open_file.dart';
 
 import 'navbar.dart';
 import 'drawer.dart';
+
+final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Dummy data for demonstration, replace this with data fetched from API
     List<Map<String, dynamic>> notes = [
       {
         "pdfUrl":
             "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
         "title": "Note 1",
-        "description": "Description of Note 1", // Add description for each note
+        "description": "Description of Note 1",
       },
       {
         "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
         "title": "Note 2",
-        "description": "Description of Note 2", // Add description for each note
+        "description": "Description of Note 2",
       },
-      // Add more notes data here as needed
+      {
+        "pdfUrl":
+            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
+        "title": "Note 1",
+        "description": "Description of Note 1",
+      },
+      {
+        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+        "title": "Note 2",
+        "description": "Description of Note 2",
+      },
+      {
+        "pdfUrl":
+            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
+        "title": "Note 1",
+        "description": "Description of Note 1",
+      },
+      {
+        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+        "title": "Note 2",
+        "description": "Description of Note 2",
+      },
     ];
 
     return Scaffold(
@@ -86,16 +110,10 @@ class DashboardPage extends StatelessWidget {
                           if (downloadPath != null) {
                             var filePath =
                                 '$downloadPath/${notes[index]["title"]}.pdf';
-                            var response = await http
-                                .get(Uri.parse(notes[index]["pdfUrl"]));
-                            var file = File(filePath);
-                            await file.writeAsBytes(response.bodyBytes);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Downloaded to $filePath')),
-                            );
-                            // Open the PDF file with default PDF viewer app
-                            _launchPDF(filePath);
+                            _sendDownloadNotification(
+                                filePath); // Show initial notification
+                            await _startDownload(
+                                notes[index]["pdfUrl"], filePath);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -128,16 +146,6 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  // Function to launch PDF file with default PDF viewer app
-  void _launchPDF(String filePath) {
-    if (Platform.isAndroid) {
-      Process.run(
-          'am', ['start', '-a', 'android.intent.action.VIEW', filePath]);
-    } else if (Platform.isIOS) {
-      // Launch the file on iOS (not implemented in this example)
-    }
-  }
-
   Future<String?> getDownloadPath() async {
     Directory? directory;
     try {
@@ -145,8 +153,7 @@ class DashboardPage extends StatelessWidget {
         directory = await getApplicationDocumentsDirectory();
       } else {
         directory = Directory('/storage/emulated/0/Download');
-        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
-        // ignore: avoid_slow_async_io
+
         if (!await directory.exists())
           directory = await getExternalStorageDirectory();
       }
@@ -154,6 +161,68 @@ class DashboardPage extends StatelessWidget {
       print("Cannot get download folder path");
     }
     return directory?.path;
+  }
+
+  Future<void> _startDownload(String url, String filePath) async {
+    var response = await http.get(Uri.parse(url));
+    var file = File(filePath);
+    await file.writeAsBytes(response.bodyBytes);
+    _sendDownloadCompleteNotification(
+        filePath); // Show download complete notification
+  }
+
+  void _sendDownloadNotification(String filePath) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'download_channel_id',
+      'Download Channel',
+
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+      // Specify the small icon resource here
+      showProgress: true,
+      // Show download progress
+      maxProgress: 100,
+      // Max progress value
+      indeterminate: false, // Make the progress bar determinate
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // Show initial download notification
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Download in progress',
+      'Your file is downloading...',
+      platformChannelSpecifics,
+      payload: filePath,
+    );
+  }
+
+  void _sendDownloadCompleteNotification(String filePath) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'download_channel_id',
+      'Download Channel',
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // Cancel the ongoing download notification
+    await flutterLocalNotificationsPlugin.cancel(0);
+
+    // Show download complete notification
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Download Complete',
+      'Your file has been downloaded',
+      platformChannelSpecifics,
+      payload: filePath,
+    );
   }
 }
 

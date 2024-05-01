@@ -21,7 +21,7 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 10.0),
+            padding: const EdgeInsets.only(right: 12.0),
             child: Container(
               child: IconButton(
                 icon: Icon(
@@ -46,7 +46,7 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0),
+            padding: const EdgeInsets.only(left: 12.0),
             child: Container(
               child: IconButton(
                 icon: Icon(
