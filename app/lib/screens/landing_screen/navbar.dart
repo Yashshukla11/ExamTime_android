@@ -57,16 +57,15 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () {
                   showMenu(
                     context: context,
-                    position: RelativeRect.fromLTRB(
-                        MediaQuery.of(context).size.width * 0.9,
-                        kToolbarHeight,
-                        0,
-                        0),
+                    position: RelativeRect.fromLTRB(100, 100, 0, 0),
                     // position where you want to show the menu
                     items: [
                       PopupMenuItem(
-                        child: NotificationPage(),
-                        // make the background transparent
+                        child: Container(
+                          color: Colors.white,
+                          // Set the background color to white
+                          child: NotificationPage(),
+                        ),
                       ),
                     ],
                   );

@@ -1,6 +1,10 @@
+import 'package:examtime/screens/landing_screen/popupdetail.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart'; // Import the shimmer package
-import 'popupdetail.dart'; // Import the PopupDetail widget
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
+
 import 'navbar.dart';
 import 'drawer.dart';
 
@@ -12,50 +16,13 @@ class DashboardPage extends StatelessWidget {
     // Dummy data for demonstration, replace this with data fetched from API
     List<Map<String, dynamic>> notes = [
       {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
+        "pdfUrl":
+            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
         "title": "Note 1",
         "description": "Description of Note 1", // Add description for each note
       },
       {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 2",
-        "description": "Description of Note 2", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 1",
-        "description": "Description of Note 1", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 2",
-        "description": "Description of Note 2", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 1",
-        "description": "Description of Note 1", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 2",
-        "description": "Description of Note 2", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
-        "title": "Note 1",
-        "description": "Description of Note 1", // Add description for each note
-      },
-      {
-        "image":
-            "https://i.postimg.cc/8zBr2SZk/Screenshot-2024-03-26-at-11-04-11-AM.png",
+        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
         "title": "Note 2",
         "description": "Description of Note 2", // Add description for each note
       },
@@ -91,9 +58,10 @@ class DashboardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FadeInImage(
-                    image: NetworkImage(notes[index]["image"]),
+                    image: NetworkImage(
+                        'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
                     fit: BoxFit.cover,
-                    placeholder: NetworkImage(
+                    placeholder: const NetworkImage(
                         'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
                   ),
                   Divider(), // Horizontal line to separate notes
@@ -109,8 +77,31 @@ class DashboardPage extends StatelessWidget {
                       ),
                       IconButton(
                         icon: Icon(Icons.download),
-                        onPressed: () {
-                          // Add functionality for download button
+                        onPressed: () async {
+                          var status = await Permission.storage.status;
+                          if (!status.isGranted) {
+                            await Permission.storage.request();
+                          }
+                          var downloadPath = await getDownloadPath();
+                          if (downloadPath != null) {
+                            var filePath =
+                                '$downloadPath/${notes[index]["title"]}.pdf';
+                            var response = await http
+                                .get(Uri.parse(notes[index]["pdfUrl"]));
+                            var file = File(filePath);
+                            await file.writeAsBytes(response.bodyBytes);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Downloaded to $filePath')),
+                            );
+                            // Open the PDF file with default PDF viewer app
+                            _launchPDF(filePath);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Could not get download path')),
+                            );
+                          }
                         },
                       ),
                     ],
@@ -131,10 +122,38 @@ class DashboardPage extends StatelessWidget {
         return PopupDetail(
           title: note["title"],
           description: note["description"],
-          imageUrl: note["image"], // Pass imageUrl to PopupDetail
+          pdfUrl: note["pdfUrl"],
         );
       },
     );
+  }
+
+  // Function to launch PDF file with default PDF viewer app
+  void _launchPDF(String filePath) {
+    if (Platform.isAndroid) {
+      Process.run(
+          'am', ['start', '-a', 'android.intent.action.VIEW', filePath]);
+    } else if (Platform.isIOS) {
+      // Launch the file on iOS (not implemented in this example)
+    }
+  }
+
+  Future<String?> getDownloadPath() async {
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
+        // ignore: avoid_slow_async_io
+        if (!await directory.exists())
+          directory = await getExternalStorageDirectory();
+      }
+    } catch (err, stack) {
+      print("Cannot get download folder path");
+    }
+    return directory?.path;
   }
 }
 

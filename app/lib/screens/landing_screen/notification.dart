@@ -10,18 +10,8 @@ class NotificationPage extends StatelessWidget {
     return Stack(
       children: <Widget>[
         SingleChildScrollView(
-          // Wrap the Container with SingleChildScrollView
           child: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0, 10),
-                      blurRadius: 10),
-                ]),
+            color: Colors.white, // Set the background color to white
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
