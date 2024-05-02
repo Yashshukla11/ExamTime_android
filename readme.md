@@ -61,11 +61,28 @@ your fingertips.
 
 ## Setup
 
-Clone the project
+1. Clone the project
 
-```bash
-  git clone https://github.com/Yashshukla11/ExamTime_android.git
-```
+    ```bash
+      git clone https://github.com/Yashshukla11/ExamTime_android.git
+    ```
+
+2. Navigate to the project directory
+
+    ```bash
+      cd ExamTime_android
+    ```
+3. Navigate to the app directory
+
+    ```bash
+      cd app
+    ```
+
+4. Install dependencies using pub get
+
+    ```bash
+      flutter pub get
+    ```
 
 ## License
 
