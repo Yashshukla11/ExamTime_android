@@ -4,6 +4,8 @@ import 'signin.dart'; // Import your sign-in page here
 import 'package:examtime/screens/landing_screen/dashboard.dart'; // Import the DashboardPage here
 
 class SignUpPage extends StatelessWidget {
+  static const String routeName = '/signup';
+
   const SignUpPage({Key? key}) : super(key: key);
 
   @override

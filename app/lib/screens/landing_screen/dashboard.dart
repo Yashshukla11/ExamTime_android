@@ -13,6 +13,8 @@ import 'drawer.dart';
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class DashboardPage extends StatelessWidget {
+  static const String routeName = '/dashboard';
+
   const DashboardPage({Key? key}) : super(key: key);
 
   @override
@@ -53,82 +55,88 @@ class DashboardPage extends StatelessWidget {
       },
     ];
 
-    return Scaffold(
-      appBar: CommonNavBar(),
-      drawer: AppDrawer(), // Use the CommonNavBar as the app bar
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              _showNoteDetails(context, notes[index]);
-            },
-            child: Container(
-              margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FadeInImage(
-                    image: NetworkImage(
-                        'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
-                    fit: BoxFit.cover,
-                    placeholder: const NetworkImage(
-                        'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
-                  ),
-                  Divider(), // Horizontal line to separate notes
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        notes[index]["title"],
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: () async {
+        return false; // Disables the back button
+      },
+      child: Scaffold(
+        appBar: CommonNavBar(),
+        drawer: AppDrawer(), // Use the CommonNavBar as the app bar
+        body: ListView.builder(
+          itemCount: notes.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                _showNoteDetails(context, notes[index]);
+              },
+              child: Container(
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FadeInImage(
+                      image: NetworkImage(
+                          'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
+                      fit: BoxFit.cover,
+                      placeholder: const NetworkImage(
+                          'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
+                    ),
+                    Divider(), // Horizontal line to separate notes
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          notes[index]["title"],
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.download),
-                        onPressed: () async {
-                          var status = await Permission.storage.status;
-                          if (!status.isGranted) {
-                            await Permission.storage.request();
-                          }
-                          var downloadPath = await getDownloadPath();
-                          if (downloadPath != null) {
-                            var filePath =
-                                '$downloadPath/${notes[index]["title"]}.pdf';
-                            _sendDownloadNotification(
-                                filePath); // Show initial notification
-                            await _startDownload(
-                                notes[index]["pdfUrl"], filePath);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Could not get download path')),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                        IconButton(
+                          icon: Icon(Icons.download),
+                          onPressed: () async {
+                            var status = await Permission.storage.status;
+                            if (!status.isGranted) {
+                              await Permission.storage.request();
+                            }
+                            var downloadPath = await getDownloadPath();
+                            if (downloadPath != null) {
+                              var filePath =
+                                  '$downloadPath/${notes[index]["title"]}.pdf';
+                              _sendDownloadNotification(
+                                  filePath); // Show initial notification
+                              await _startDownload(
+                                  notes[index]["pdfUrl"], filePath);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content:
+                                        Text('Could not get download path')),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

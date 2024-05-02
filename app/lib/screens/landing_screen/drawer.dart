@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:examtime/screens/profile/profile.dart';
+
+import '../auth_screen/signin.dart';
+import '../liked_notes/liked.dart';
+import '../request_notes/request.dart';
+import 'dashboard.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -40,31 +46,38 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+            onTap: () {
+              Navigator.pushNamed(context, DashboardPage.routeName);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('My Profile'),
             onTap: () {
-              // Navigate to the My Profile screen
+              Navigator.pushNamed(context, ProfileScreen.routeName);
             },
           ),
           ListTile(
             leading: Icon(Icons.favorite),
             title: Text('Liked Notes'),
             onTap: () {
-              // Navigate to the Liked Notes screen
+              Navigator.pushNamed(context, LikedNotesPage.routeName);
             },
           ),
           ListTile(
             leading: Icon(Icons.request_page),
             title: Text('Request Notes'),
             onTap: () {
-              // Navigate to the Request Notes screen
+              Navigator.pushNamed(context, RequestNotesPage.routeName);
             },
           ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),
             onTap: () {
-              // Log out the user
+              Navigator.pushNamed(context, LoginPage.routeName);
             },
           ),
         ],

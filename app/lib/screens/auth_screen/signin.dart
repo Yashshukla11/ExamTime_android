@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
+  static const String routeName = '/login';
+
   const LoginPage({Key? key}) : super(key: key);
 
   @override

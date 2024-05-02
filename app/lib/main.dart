@@ -1,7 +1,11 @@
+import 'package:examtime/screens/request_notes/request.dart';
 import 'package:flutter/material.dart';
+import 'package:examtime/screens/landing_screen/dashboard.dart';
+import 'package:examtime/screens/liked_notes/liked.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
+import 'package:examtime/screens/profile/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +21,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF1F2937),
       ),
-      home: const LoadingScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoadingScreen(),
+        DashboardPage.routeName: (context) => DashboardPage(),
+        LoginPage.routeName: (context) => LoginPage(),
+        SignUpPage.routeName: (context) => SignUpPage(),
+        ProfileScreen.routeName: (context) => ProfileScreen(),
+        LikedNotesPage.routeName: (context) => LikedNotesPage(),
+        RequestNotesPage.routeName: (context) => RequestNotesPage(),
+      },
     );
   }
 }
@@ -43,9 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen>
     );
     _animationController.forward().then((_) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
+        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       });
     });
   }
@@ -81,7 +92,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               height: 200,
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               'Welcome to ExamTime!',
               style: TextStyle(
                 fontSize: 20,
