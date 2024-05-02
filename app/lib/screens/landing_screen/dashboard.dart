@@ -224,9 +224,32 @@ class DashboardPage extends StatelessWidget {
       payload: filePath,
     );
   }
+
+  Future<void> initNotification() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('notification_icon');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+      onDidReceiveBackgroundNotificationResponse:
+          (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+    );
+  }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DashboardPage().initNotification(); // Initialize notifications
   runApp(MaterialApp(
     home: DashboardPage(),
   ));

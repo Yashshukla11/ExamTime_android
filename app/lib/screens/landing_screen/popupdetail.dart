@@ -22,6 +22,7 @@ class PopupDetail extends StatefulWidget {
 
 class _PopupDetailState extends State<PopupDetail> {
   String? path;
+  bool isLoading = true; // Added for better loading indication
 
   @override
   void initState() {
@@ -30,31 +31,46 @@ class _PopupDetailState extends State<PopupDetail> {
   }
 
   Future<void> loadPdf() async {
-    var tempDir = await getTemporaryDirectory();
-    var tempPath = tempDir.path;
-    var filePath = '$tempPath/${widget.title}.pdf';
-    var response = await http.get(Uri.parse(widget.pdfUrl));
-    var file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-    setState(() {
-      path = filePath;
-    });
+    try {
+      var tempDir = await getTemporaryDirectory();
+      var tempPath = tempDir.path;
+      var filePath = '$tempPath/${widget.title}.pdf';
+      var response = await http.get(Uri.parse(widget.pdfUrl));
+
+      if (response.statusCode == 200) {
+        var file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+        setState(() {
+          path = filePath;
+          isLoading = false; // Updated when loading completes
+        });
+      } else {
+        throw Exception('Failed to load PDF');
+      }
+    } catch (e) {
+      print('Error loading PDF: $e');
+      setState(() {
+        isLoading = false; // Handle loading error
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.title),
-      content: path != null
-          ? CircularProgressIndicator()
+      content: isLoading
+          ? Center(child: CircularProgressIndicator())
           : Container(
               height: 300,
-              child: PDFView(
-                filePath: path!, // Corrected to 'filePath'
-                autoSpacing: true,
-                pageFling: true,
-                swipeHorizontal: true,
-              ),
+              child: path != null
+                  ? PDFView(
+                      filePath: path!,
+                      autoSpacing: true,
+                      pageFling: true,
+                      swipeHorizontal: true,
+                    )
+                  : Text('Failed to load PDF'),
             ),
       actions: <Widget>[
         TextButton(
