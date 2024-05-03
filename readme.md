@@ -1,3 +1,7 @@
+<div>
+    <img align=top src="https://miro.medium.com/max/1400/1*c4YgRXYQayOVWxV37ourrw.png" width="100%"/>
+
+<div>
 <div align="center">
 
 <a href="https://github.com/Yashshukla11/ExamTime_android.git" target="_blank" title="ExamTime Android">![ExamTime Android](https://socialify.git.ci/Yashshukla11/ExamTime_android/image?description=1&descriptionEditable=Access%20all%20your%20college%20notes%20on%20the%20go%20with%20ExamTime%20Android&font=Jost&name=1&owner=1&pattern=Plus&theme=Auto)</a>
