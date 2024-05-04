@@ -1,7 +1,9 @@
-<div>
-    <img align=top src="https://miro.medium.com/max/1400/1*c4YgRXYQayOVWxV37ourrw.png" width="100%"/>
 
-<div>
+![GSSoC Logo Light](https://user-images.githubusercontent.com/63473496/213306239-9e8fc317-ce2f-4127-8bfe-17f5df06ee99.png#gh-light-mode-only)
+![GSSoC Logo Dark](https://user-images.githubusercontent.com/63473496/213306279-338f7ce9-9a9f-4427-8c2a-3e344874498f.png#gh-dark-mode-only)
+
+
+
 <div align="center">
 
 <a href="https://github.com/Yashshukla11/ExamTime_android.git" target="_blank" title="ExamTime Android">![ExamTime Android](https://socialify.git.ci/Yashshukla11/ExamTime_android/image?description=1&descriptionEditable=Access%20all%20your%20college%20notes%20on%20the%20go%20with%20ExamTime%20Android&font=Jost&name=1&owner=1&pattern=Plus&theme=Auto)</a>
