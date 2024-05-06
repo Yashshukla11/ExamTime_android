@@ -47,6 +47,8 @@ dependencies:
   url_launcher: ^6.2.6
   flutter_local_notifications: ^17.1.1
   open_file: ^3.3.2
+  font_awesome_flutter:
+
 
 dev_dependencies:
   flutter_test:
