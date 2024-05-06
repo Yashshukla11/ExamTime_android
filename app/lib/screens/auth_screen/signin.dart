@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                     width: 200,
                     height: 150,
                   ),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextField(
+                  const TextField(
                     obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
                         builder: (context) => SignUpPage(),
                       ));
                     },
-                    child: Text(
+                    child: const Text(
                       'Don\'t have an account? Sign up',
                       style: TextStyle(color: Colors.white),
                     ),
