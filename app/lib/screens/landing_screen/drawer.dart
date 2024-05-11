@@ -15,8 +15,8 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            color: Color(0xFF1F2937), // Header background color
-            padding: EdgeInsets.symmetric(vertical: 40),
+            color: const Color(0xFF1F2937), // Header background color
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -46,36 +46,36 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () {
               Navigator.pushNamed(context, DashboardPage.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('My Profile'),
+            leading: const Icon(Icons.account_circle),
+            title: const Text('My Profile'),
             onTap: () {
               Navigator.pushNamed(context, ProfileScreen.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Liked Notes'),
+            leading: const Icon(Icons.favorite),
+            title: const Text('Liked Notes'),
             onTap: () {
               Navigator.pushNamed(context, LikedNotesPage.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.request_page),
-            title: Text('Request Notes'),
+            leading: const Icon(Icons.request_page),
+            title: const Text('Request Notes'),
             onTap: () {
               Navigator.pushNamed(context, RequestNotesPage.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
             onTap: () {
               Navigator.pushNamed(context, LoginPage.routeName);
             },

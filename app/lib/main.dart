@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoadingScreen(),
-        DashboardPage.routeName: (context) => DashboardPage(),
-        LoginPage.routeName: (context) => LoginPage(),
-        SignUpPage.routeName: (context) => SignUpPage(),
+        '/': (context) => const LoadingScreen(),
+        DashboardPage.routeName: (context) => const DashboardPage(),
+        LoginPage.routeName: (context) => const LoginPage(),
+        SignUpPage.routeName: (context) => const SignUpPage(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
-        LikedNotesPage.routeName: (context) => LikedNotesPage(),
-        RequestNotesPage.routeName: (context) => RequestNotesPage(),
+        LikedNotesPage.routeName: (context) => const LikedNotesPage(),
+        RequestNotesPage.routeName: (context) => const RequestNotesPage(),
       },
     );
   }
@@ -65,7 +65,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _backgroundColorAnimation = ColorTween(
-      begin: Color(0xFF1F2937),
+      begin: const Color(0xFF1F2937),
       end: Theme.of(context).primaryColor,
     ).animate(_animationController);
   }
@@ -86,8 +86,8 @@ class _LoadingScreenState extends State<LoadingScreen>
           children: [
             CachedNetworkImage(
               imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               width: 200,
               height: 200,
             ),

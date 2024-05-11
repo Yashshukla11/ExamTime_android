@@ -22,12 +22,12 @@ class SignUpPage extends StatelessWidget {
                 children: [
                   CachedNetworkImage(
                     imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     width: 200,
                     height: 150,
                   ),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -36,7 +36,7 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -45,7 +45,7 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  TextField(
+                  const TextField(
                     obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
@@ -55,7 +55,7 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  TextField(
+                  const TextField(
                     obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
@@ -69,7 +69,7 @@ class SignUpPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => DashboardPage(),
+                          builder: (context) => const DashboardPage(),
                         ),
                       );
                     },
@@ -81,18 +81,18 @@ class SignUpPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Sign Up'),
+                    child: const Text('Sign Up'),
                   ),
                   const SizedBox(height: 10.0),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Already have an account? Sign in',
                       style: TextStyle(color: Colors.white),
                     ),

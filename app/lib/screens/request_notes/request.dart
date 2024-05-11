@@ -29,7 +29,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
         return false;
       },
       child: Scaffold(
-        appBar: CommonNavBar(),
+        appBar: const CommonNavBar(),
         drawer: AppDrawer(), // Use the CommonNavBar
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -38,7 +38,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
             children: [
               TextField(
                 controller: _noteController,
-                cursorColor: Color(0xFF1F2937), // Set cursor color
+                cursorColor: const Color(0xFF1F2937), // Set cursor color
                 decoration: const InputDecoration(
                   labelText: 'Enter your note request',
                   labelStyle: TextStyle(
@@ -56,17 +56,17 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   _submitNoteRequest(context);
                 },
-                child: Text(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1F2937),
+                ),
+                child: const Text(
                   'Submit',
                   style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF1F2937),
                 ),
               ),
             ],
@@ -113,7 +113,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -124,11 +124,11 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
-                      color: Color(0xFF1F2937),
+                      color: const Color(0xFF1F2937),
                       // Set border color
                     ),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'OK',
                       style:

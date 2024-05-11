@@ -41,8 +41,8 @@ class LoginPage extends StatelessWidget {
                 children: [
                   CachedNetworkImage(
                     imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     width: 200,
                     height: 150,
                   ),
@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DashboardPage()),
+                            builder: (context) => const DashboardPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -81,13 +81,13 @@ class LoginPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Login'),
+                    child: const Text('Login'),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
+                        builder: (context) => const SignUpPage(),
                       ));
                     },
                     child: const Text(

@@ -60,7 +60,7 @@ class _PopupDetailState extends State<PopupDetail> {
     return AlertDialog(
       title: Text(widget.title),
       content: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Container(
               height: 300,
               child: path != null
@@ -70,14 +70,14 @@ class _PopupDetailState extends State<PopupDetail> {
                       pageFling: true,
                       swipeHorizontal: true,
                     )
-                  : Text('Failed to load PDF'),
+                  : const Text('Failed to load PDF'),
             ),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Close'),
+          child: const Text('Close'),
         ),
       ],
     );

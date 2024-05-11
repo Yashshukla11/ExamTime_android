@@ -24,18 +24,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String newName = _name;
         String newEmail = _email;
         return AlertDialog(
-          title: Text('Edit Profile'),
+          title: const Text('Edit Profile'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 onChanged: (value) {
                   newName = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 onChanged: (value) {
                   newEmail = value;
                 },
@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -67,11 +67,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: CommonNavBar(),
+        appBar: const CommonNavBar(),
         drawer: AppDrawer(),
         body: Column(
           children: [
-            Center(
+            const Center(
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
                   'https://i.postimg.cc/2SMLF3mb/man.png',
@@ -79,26 +79,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 radius: 50,
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Text(
               _name,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               _email,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _editProfile,
-              child: Text('Edit Profile'),
+              child: const Text('Edit Profile'),
             ),
           ],
         ),

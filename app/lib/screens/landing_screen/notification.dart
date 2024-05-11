@@ -15,19 +15,19 @@ class NotificationPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
+                const Text(
                   'Notifications',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                Text(
+                const Text(
                   'You have 3 new notifications',
                   style: TextStyle(fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 22,
                 ),
                 Align(
@@ -36,7 +36,7 @@ class NotificationPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: const Text(
                         'Close',
                         style: TextStyle(fontSize: 18),
                       )),
