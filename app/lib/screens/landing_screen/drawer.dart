@@ -1,3 +1,4 @@
+import 'package:examtime/screens/upload_screen/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/profile/profile.dart';
 
@@ -57,6 +58,17 @@ class AppDrawer extends StatelessWidget {
             title: Text('My Profile'),
             onTap: () {
               Navigator.pushNamed(context, ProfileScreen.routeName);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.upload),
+            title: Text('Upload Notes'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UploadScreen(),
+                  ));
             },
           ),
           ListTile(

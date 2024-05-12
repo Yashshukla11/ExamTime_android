@@ -1,4 +1,5 @@
 import 'package:examtime/screens/request_notes/request.dart';
+import 'package:examtime/screens/upload_screen/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
 import 'package:examtime/screens/liked_notes/liked.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ExamTime',
       theme: ThemeData(
         primaryColor: const Color(0xFF1F2937),
