@@ -1,4 +1,6 @@
+import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
+import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -67,7 +69,13 @@ class DashboardPage extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                _showNoteDetails(context, notes[index]);
+                // _showNoteDetails(context, notes[index]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PreviewNoteScreen(Notes.fromMap(notes[index]))
+                  ),
+                );
               },
               child: Container(
                 margin: EdgeInsets.all(20),
@@ -100,13 +108,13 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         Text(
                           notes[index]["title"],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.download),
+                          icon: const Icon(Icons.download),
                           onPressed: () async {
                             var status = await Permission.storage.status;
                             if (!status.isGranted) {

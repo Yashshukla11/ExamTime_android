@@ -57,29 +57,16 @@ class _PopupDetailState extends State<PopupDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.title),
-      content: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              height: 300,
-              child: path != null
-                  ? PDFView(
-                      filePath: path!,
-                      autoSpacing: true,
-                      pageFling: true,
-                      swipeHorizontal: true,
-                    )
-                  : Text('Failed to load PDF'),
-            ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Close'),
-        ),
-      ],
-    );
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : SizedBox(
+            child: path != null
+                ? PDFView(
+                    filePath: path!,
+                    autoSpacing: true,
+                    pageFling: true,
+                  )
+                : const Text('Failed to load PDF'),
+          );
   }
 }
