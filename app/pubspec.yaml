@@ -48,6 +48,8 @@ dependencies:
   flutter_local_notifications: ^17.1.1
   open_file: ^3.3.2
   font_awesome_flutter:
+  dio: ^5.4.3+1
+  shared_preferences: ^2.2.3
 
 
 dev_dependencies:
