@@ -132,7 +132,7 @@
 <div align='left'>
 <!-- contributing guideline detail -->
 
-- Read our [CONTRIBUTING GUIDELINE](/CONTRIBUTING_GUIDELINE.md) to get all details about contributing to **ExamTime**
+- Read our [CONTRIBUTING GUIDELINE](/CONTRIBUTING.md) to get all details about contributing to **ExamTime**
 - Learn all about development process and all information you need to contribute to our project
 - If you are having the basic queries make sure you checkout resources there
 </div>
