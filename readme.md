@@ -68,17 +68,16 @@
 
 
 ## Key Features
-
-
+<div align='left'>
+  
 - **Mobile Access**: Access your study notes anytime, anywhere directly from your Android device.
 - **Offline Viewing**: Download notes for offline access, ensuring you can study even without an
   internet connection.
-- **Search**: Quickly find specific notes by searching through your collection.
+- **Search**: Find specific notes through your collection.
 - **Contribute**: Contribute to the platform by uploading notes directly from your Android device.
+  
 </br>
-</br>
-
-
+</div>
 
 # Screenshots
 
@@ -92,51 +91,51 @@
 
 <br>
 <br>
-
+<div align='left'>
 ## Setup
 
 <br>
 
-1. Clone the project
+1. Clone the project:
 
     ```bash
       git clone https://github.com/Yashshukla11/ExamTime_android.git
     ```
 
-2. Navigate to the project directory
+2. Navigate to the project directory:
 
     ```bash
       cd ExamTime_android
     ```
-3. Navigate to the app directory
+3. Navigate to the app directory:
 
     ```bash
       cd app
     ```
 
-4. Install dependencies using pub get
+4. Install dependencies:
 
     ```bash
       flutter pub get
     ```
-5. Run the Flutter app
+5. Run the Flutter app:
     ```bash
       flutter run
     ```
-
+</div>
 <br>
 <br>
 <div align="center">
 <h2><font size="6"><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" alt="Page with Curl" width="40" height="40" /> Contributing Guideline </font></h2>
 </div>
 <br>
-
+<div align='left'>
 <!-- contributing guideline detail -->
 
 - Read our [CONTRIBUTING GUIDELINE](./.github/CONTRIBUTING_GUIDELINE.md) to get all details about contributing to **ExamTime**
 - Learn all about development process and all information you need to contribute to our project
 - If you are having the basic queries make sure you checkout resources there
-
+</div>
 <br>
 <br>
 <!-- code of conduct -->
