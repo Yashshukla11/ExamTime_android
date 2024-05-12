@@ -55,18 +55,91 @@ class _PopupDetailState extends State<PopupDetail> {
     }
   }
 
+  PDFViewController? pdfViewController;
+  TextEditingController pageNumberTextEditingController =
+      TextEditingController(text: "1");
+  int currentPage = 1;
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
-        : SizedBox(
-            child: path != null
-                ? PDFView(
-                    filePath: path!,
-                    autoSpacing: true,
-                    pageFling: true,
-                  )
-                : const Text('Failed to load PDF'),
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 300,
+                  child: path != null
+                      ? PDFView(
+                          onRender: (pages) => {},
+                          onViewCreated: (controller) {
+                            pdfViewController = controller;
+                          },
+                          onPageChanged: (page, total) {
+                            pageNumberTextEditingController.text =
+                                (page! + 1).toString();
+                            setState(() {});
+                          },
+                          filePath: path!,
+                          autoSpacing: true,
+                          pageFling: true,
+                          swipeHorizontal: true,
+                        )
+                      : const Text('Failed to load PDF'),
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    color: Colors.white,
+                    child: TextFormField(
+                      controller: pageNumberTextEditingController,
+                      // cursorHeight: 5,
+                      textAlignVertical: TextAlignVertical.center,
+                      maxLines: 1,
+
+                      style: const TextStyle(fontSize: 15),
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      onFieldSubmitted: (value) async {
+                        if (value.trim().isEmpty) {
+                          int? pn = await pdfViewController!.getCurrentPage();
+                          pageNumberTextEditingController.text = pn.toString();
+                        }
+                        int? num;
+                        int? pageCount =
+                            await pdfViewController!.getPageCount();
+                        num = int.tryParse(value.trim());
+
+                        setState(() {
+                          if (num != null &&
+                              num! - 1 >= 0 &&
+                              num! - 1 < pageCount!) {
+                            num = num! - 1;
+                            pdfViewController!.setPage(num!);
+                          } else if (num! - 1 > pageCount!) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Maximum page size is $pageCount"),
+                            ));
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Invalid page number"),
+                            ));
+                          }
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 13),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
   }
 }
