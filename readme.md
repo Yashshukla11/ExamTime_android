@@ -3,9 +3,6 @@
 ![GSSoC Logo Dark](https://user-images.githubusercontent.com/63473496/213306279-338f7ce9-9a9f-4427-8c2a-3e344874498f.png#gh-dark-mode-only)
 
 
-
-
-
 <div align="center">
 <h1>
 <font size="10"> ExamTime</font>
