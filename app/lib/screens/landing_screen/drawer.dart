@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/profile/profile.dart';
 import 'package:flutter/widgets.dart';
@@ -121,6 +122,7 @@ class AppDrawer extends StatelessWidget {
                                 leading: Icon(Icons.logout),
                                 title: Text('Logout'),
                                 onTap: () {
+                                  SharedServices.logout(context);
                                   Navigator.pushNamed(
                                       context, LoginPage.routeName);
                                 },

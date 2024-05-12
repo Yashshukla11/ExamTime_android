@@ -1,35 +1,19 @@
+import 'dart:developer';
+
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'signup.dart';
+import 'signin.dart'; // Import your sign-in page here
 import 'package:examtime/screens/landing_screen/dashboard.dart'; // Import the DashboardPage here
 
-void main() {
-  runApp(const MyApp());
-}
+class SignUpPage extends StatelessWidget {
+  static const String routeName = '/signup';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ExamTime',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF1F2937),
-      ),
-      home: const LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  static const String routeName = '/login';
-
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+    TextEditingController name = TextEditingController();
     TextEditingController email = TextEditingController();
     TextEditingController password = TextEditingController();
     return Scaffold(
@@ -44,8 +28,10 @@ class LoginPage extends StatelessWidget {
                 children: [
                   CachedNetworkImage(
                     imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                     width: 200,
                     height: 150,
                   ),
@@ -58,10 +44,20 @@ class LoginPage extends StatelessWidget {
                       prefixIcon: Icon(Icons.mail),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 10.0),
                   TextField(
-                    obscureText: true,
+                    controller: name,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Username',
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextField(
                     controller: password,
+                    obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -69,17 +65,32 @@ class LoginPage extends StatelessWidget {
                       prefixIcon: Icon(Icons.lock),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10.0),
+                  const TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Confirm Password',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
-                      Apiservices.loginUser(
+                      Apiservices.signupUser(
+                              name: name.text,
                               email: email.text,
                               password: password.text,
                               context: context)
                           .then((value) {
+                        log(value.toString());
                         if (value) {
-                          Navigator.pushReplacementNamed(
-                              context, DashboardPage.routeName);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
                         }
                       });
                     },
@@ -91,17 +102,19 @@ class LoginPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Login'),
+                    child: const Text('Sign Up'),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 10.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
-                      ));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
                     },
-                    child: const Text(
-                      'Don\'t have an account? Sign up',
+                    child: Text(
+                      'Already have an account? Sign in',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
