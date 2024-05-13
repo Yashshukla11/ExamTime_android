@@ -132,7 +132,7 @@
 <div align='left'>
 <!-- contributing guideline detail -->
 
-- Read our [CONTRIBUTING GUIDELINE](./.github/CONTRIBUTING_GUIDELINE.md) to get all details about contributing to **ExamTime**
+- Read our [CONTRIBUTING GUIDELINE](/CONTRIBUTING.md) to get all details about contributing to **ExamTime**
 - Learn all about development process and all information you need to contribute to our project
 - If you are having the basic queries make sure you checkout resources there
 </div>
@@ -145,7 +145,7 @@
 </div>
 <br>
 
-- Please note that this project is released with [CODE OF CONDUCT](./.github/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+- Please note that this project is released with [CODE OF CONDUCT](/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 <br>
 
