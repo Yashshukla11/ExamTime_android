@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'navbar.dart';
 import 'drawer.dart';
@@ -118,6 +121,13 @@ class DashboardPage extends StatelessWidget {
                       ),
                       SizedBox(width: 180),
                         IconButton(
+                            onPressed: () {
+                              shareDownloadedPdf(notes[index]["pdfUrl"], notes[index]["title"]);
+                            },
+                            icon: Icon(Icons.share_outlined)
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.download),
                           icon: Icon(Icons.download),
                           onPressed: () async {
                             var status = await Permission.storage.status;
@@ -152,6 +162,34 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
+  Future<void> shareDownloadedPdf(String pdfUrl,String title) async {
+    try {
+      final fileName = "$title.pdf";
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final filePath = "${appDocDir.path}/$fileName";
+
+      final response = await Dio().download(pdfUrl, filePath);
+      if (response.statusCode == 200) {
+        final xFile = XFile(filePath);
+        await Share.shareXFiles([xFile]);
+      } else {
+        print("Problem in Downloading a file For sharing");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopupDetail(
+          title: note["title"],
+          description: note["description"],
+          pdfUrl: note["pdfUrl"],
+        );
+      },
+    );
  void _toggleLikedStatus(int index, List<bool> likedStatus) {
     List<bool> updatedStatus = List.from(likedStatus);
     updatedStatus[index] = !updatedStatus[index];
