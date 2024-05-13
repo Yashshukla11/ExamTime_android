@@ -15,7 +15,8 @@ final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 class DashboardPage extends StatelessWidget {
   static const String routeName = '/dashboard';
 
-  DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> notes = [
@@ -53,8 +54,7 @@ class DashboardPage extends StatelessWidget {
         "description": "Description of Note 2",
       },
     ];
-     
-   List<bool> likedStatus = List.generate(notes.length, (index) => false);
+
     return WillPopScope(
       onWillPop: () async {
         return false; // Disables the back button
@@ -65,9 +65,6 @@ class DashboardPage extends StatelessWidget {
         body: ListView.builder(
           itemCount: notes.length,
           itemBuilder: (BuildContext context, int index) {
-             if (likedStatus.length <= index) {
-            likedStatus.add(false); 
-          }
             return GestureDetector(
               onTap: () {
                 _showNoteDetails(context, notes[index]);
@@ -88,7 +85,7 @@ class DashboardPage extends StatelessWidget {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FadeInImage(
                       image: NetworkImage(
@@ -99,7 +96,7 @@ class DashboardPage extends StatelessWidget {
                     ),
                     Divider(), // Horizontal line to separate notes
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           notes[index]["title"],
@@ -107,16 +104,7 @@ class DashboardPage extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),IconButton(
-                        icon: Icon(
-                         likedStatus[index] ? Icons.favorite : Icons.favorite_border,
-                          color: likedStatus[index] ? Colors.red : Colors.grey,
                         ),
-                        onPressed: () {
-                         _toggleLikedStatus(index, likedStatus);
-                        },
-                      ),
-                      SizedBox(width: 180),
                         IconButton(
                           icon: Icon(Icons.download),
                           onPressed: () async {
@@ -152,23 +140,19 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
- void _toggleLikedStatus(int index, List<bool> likedStatus) {
-    List<bool> updatedStatus = List.from(likedStatus);
-    updatedStatus[index] = !updatedStatus[index];
-    likedStatus.replaceRange(0, likedStatus.length, updatedStatus);
+
+  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopupDetail(
+          title: note["title"],
+          description: note["description"],
+          pdfUrl: note["pdfUrl"],
+        );
+      },
+    );
   }
-  // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return PopupDetail(
-  //         title: note["title"],
-  //         description: note["description"],
-  //         pdfUrl: note["pdfUrl"],
-  //       );
-  //     },
-  //   );
-  // }
 
   Future<String?> getDownloadPath() async {
     Directory? directory;
