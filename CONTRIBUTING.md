@@ -6,31 +6,38 @@ This guide will walk you through the process of contributing to ExamTime!
 
 <br>
 
-1. Clone the project
+1. Fork the repository
+
+    Click on the "Fork" button in the upper right corner of the repository page on GitHub to create a copy of the repository in your GitHub account.
+
+2. Clone the forked repository
 
     ```bash
-      git clone https://github.com/Yashshukla11/ExamTime_android.git
+    git clone https://github.com/YourUsername/ExamTime_android
     ```
 
-2. Navigate to the project directory
+3. Navigate to the project directory
 
     ```bash
-      cd ExamTime_android
-    ```
-3. Navigate to the app directory
-
-    ```bash
-      cd app
+    cd ExamTime_android
     ```
 
-4. Install dependencies using pub get
+4. Navigate to the app directory
 
     ```bash
-      flutter pub get
+    cd app
     ```
-5. Run the Flutter app
+
+5. Install dependencies using pub get
+
     ```bash
-      flutter run
+    flutter pub get
+    ```
+
+6. Run the Flutter app
+
+    ```bash
+    flutter run
     ```
 
 Now you are done with the project setup, now you can make the changes you want or assign.
@@ -56,10 +63,8 @@ Once you are done with the changes you wanted to add, follow the steps to make t
 ### Documentation 📑
 
 - Document any significant changes or additions to the codebase.
-- Provide clear and concise explanations of the functionality, usage, and any relevant
-  considerations.
-- Update the `README.md` file to reflect the changes made and provide instructions on how to use the
-  project (if needed).
+- Provide clear and concise explanations of the functionality, usage, and any relevant considerations.
+- Update the `README.md` file to reflect the changes made and provide instructions on how to use the project (if needed).
 
 ### ✅ Code Reviews
 
@@ -69,8 +74,7 @@ Once you are done with the changes you wanted to add, follow the steps to make t
 ### ✅ Bug Fixes and Issue Reporting
 
 - Help identify and fix bugs in the project.
-- Report any issues or bugs you encounter during your contribution by creating a new issue in the
-  GitHub repository.
+- Report any issues or bugs you encounter during your contribution by creating a new issue in the GitHub repository.
 
 ### 🚀🚀Feature Requests
 
@@ -79,8 +83,6 @@ Once you are done with the changes you wanted to add, follow the steps to make t
 ### ☘️ Spread the Word
 
 - Share your experience and the project with others.
-- Spread the word about the project on social media, developer forums, or any relevant community
-  platforms.
+- Spread the word about the project on social media, developer forums, or any relevant community platforms.
 
-Thank you for your valuable contribution and for being a part of the ExamTime! Together, we can make
-a difference. 🚀
+Thank you for your valuable contribution and for being a part of the ExamTime! Together, we can make a difference. 🚀
