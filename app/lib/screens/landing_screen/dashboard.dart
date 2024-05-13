@@ -1,4 +1,6 @@
+import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
+import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -67,7 +69,13 @@ class DashboardPage extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                _showNoteDetails(context, notes[index]);
+                // _showNoteDetails(context, notes[index]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PreviewNoteScreen(Notes.fromMap(notes[index]))
+                  ),
+                );
               },
               child: Container(
                 margin: const EdgeInsets.all(20),
