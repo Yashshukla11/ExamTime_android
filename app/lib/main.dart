@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:examtime/services/SharedServices/Preferences.dart';
+import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/screens/request_notes/request.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
@@ -6,8 +10,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
 import 'package:examtime/screens/profile/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  preferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -56,7 +63,12 @@ class _LoadingScreenState extends State<LoadingScreen>
     );
     _animationController.forward().then((_) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+        // log(SharedServices.getLoginDetails()!.token!);
+        if (SharedServices.isLoggedIn()) {
+          Navigator.pushReplacementNamed(context, DashboardPage.routeName);
+        } else {
+          Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+        }
       });
     });
   }
