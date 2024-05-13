@@ -1,6 +1,4 @@
-import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
-import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -72,13 +70,7 @@ class DashboardPage extends StatelessWidget {
           }
             return GestureDetector(
               onTap: () {
-                // _showNoteDetails(context, notes[index]);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PreviewNoteScreen(Notes.fromMap(notes[index]))),
-                );
+                _showNoteDetails(context, notes[index]);
               },
               child: Container(
                 margin: EdgeInsets.all(20),
@@ -111,7 +103,7 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         Text(
                           notes[index]["title"],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -126,7 +118,7 @@ class DashboardPage extends StatelessWidget {
                       ),
                       SizedBox(width: 180),
                         IconButton(
-                          icon: const Icon(Icons.download),
+                          icon: Icon(Icons.download),
                           onPressed: () async {
                             var status = await Permission.storage.status;
                             if (!status.isGranted) {
@@ -160,7 +152,6 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
  void _toggleLikedStatus(int index, List<bool> likedStatus) {
     List<bool> updatedStatus = List.from(likedStatus);
     updatedStatus[index] = !updatedStatus[index];
@@ -178,21 +169,6 @@ class DashboardPage extends StatelessWidget {
       },
     );
   }
-=======
-
-  // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return PopupDetail(
-  //         title: note["title"],
-  //         description: note["description"],
-  //         pdfUrl: note["pdfUrl"],
-  //       );
-  //     },
-  //   );
-  // }
->>>>>>> upstream/main
 
   Future<String?> getDownloadPath() async {
     Directory? directory;
