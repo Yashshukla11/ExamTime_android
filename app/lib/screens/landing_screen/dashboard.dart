@@ -157,18 +157,18 @@ class DashboardPage extends StatelessWidget {
     updatedStatus[index] = !updatedStatus[index];
     likedStatus.replaceRange(0, likedStatus.length, updatedStatus);
   }
-  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PopupDetail(
-          title: note["title"],
-          description: note["description"],
-          pdfUrl: note["pdfUrl"],
-        );
-      },
-    );
-  }
+  // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return PopupDetail(
+  //         title: note["title"],
+  //         description: note["description"],
+  //         pdfUrl: note["pdfUrl"],
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<String?> getDownloadPath() async {
     Directory? directory;
