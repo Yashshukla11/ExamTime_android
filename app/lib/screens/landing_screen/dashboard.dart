@@ -73,8 +73,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PreviewNoteScreen(Notes.fromMap(notes[index]))
-                  ),
+                      builder: (context) =>
+                          PreviewNoteScreen(Notes.fromMap(notes[index]))),
                 );
               },
               child: Container(
@@ -149,18 +149,18 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PopupDetail(
-          title: note["title"],
-          description: note["description"],
-          pdfUrl: note["pdfUrl"],
-        );
-      },
-    );
-  }
+  // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return PopupDetail(
+  //         title: note["title"],
+  //         description: note["description"],
+  //         pdfUrl: note["pdfUrl"],
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<String?> getDownloadPath() async {
     Directory? directory;
