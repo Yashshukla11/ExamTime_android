@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
+import "package:dio/dio.dart";
 
 class DioErrorHandling {
   static String? handleDioError(DioException error) {
