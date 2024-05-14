@@ -64,7 +64,6 @@ class _LoadingScreenState extends State<LoadingScreen>
     );
     _animationController.forward().then((_) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        //  log(SharedServices.getLoginDetails()!.token!);
         if (SharedServices.isLoggedIn()) {
           Navigator.pushReplacementNamed(context, DashboardPage.routeName);
         } else {
