@@ -25,12 +25,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ExamTime',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFF1F2937),
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoadingScreen(),
+        '/': (context) => const LoadingScreen(),
         DashboardPage.routeName: (context) => DashboardPage(),
         LoginPage.routeName: (context) => LoginPage(),
         SignUpPage.routeName: (context) => SignUpPage(),
