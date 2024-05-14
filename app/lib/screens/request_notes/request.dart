@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/landing_screen/navbar.dart';
 import 'package:examtime/screens/landing_screen/drawer.dart';
+import 'package:examtime/screens/landing_screen/navbar.dart';
+import 'package:flutter/material.dart';
 
 class RequestNotesPage extends StatefulWidget {
   static const String routeName = '/request_notes';
@@ -38,20 +38,18 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
             children: [
               TextField(
                 controller: _noteController,
-                cursorColor: Color(0xFF1F2937), // Set cursor color
-                decoration: const InputDecoration(
+                cursorColor: Theme.of(context).colorScheme.secondary, // Set cursor color
+                decoration: InputDecoration(
                   labelText: 'Enter your note request',
-                  labelStyle: TextStyle(
-                    color: Color(0xFF1F2937), // Set label text color
-                  ),
+                  labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Color(0xFF1F2937), // Set border color
+                      color: Theme.of(context).colorScheme.secondary, // Set border color
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Color(0xFF1F2937), // Set border color
+                      color: Theme.of(context).colorScheme.secondary, // Set border color
                     ),
                   ),
                 ),
@@ -66,7 +64,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF1F2937),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
@@ -87,29 +85,30 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Set background color to white
+          backgroundColor: Theme.of(context).colorScheme.background, 
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Padding(
+               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Note Request Sent',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF1F2937), // Set text color
+                    color: Theme.of(context).colorScheme.secondary, // Set text color
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const Padding(
+               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
+                child: 
+                Text(
                   'Your note request has been sent successfully.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF1F2937), // Set text color
+                    color:Theme.of(context).colorScheme.secondary, // Set text color
                   ),
                 ),
               ),
@@ -124,7 +123,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
-                      color: Color(0xFF1F2937),
+                      color: Theme.of(context).colorScheme.secondary,
                       // Set border color
                     ),
                   ),
@@ -132,12 +131,11 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                     child: Text(
                       'OK',
                       style:
-                          TextStyle(color: Color(0xFF1F2937)), // Set text color
-                    ),
+                          TextStyle(color: Theme.of(context).colorScheme.secondary)
                   ),
                 ),
               ),
-            ],
+          )],
           ),
         );
       },

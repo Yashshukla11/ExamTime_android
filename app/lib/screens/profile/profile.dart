@@ -1,12 +1,8 @@
 import 'package:examtime/common_widget/custom_button.dart';
 import 'package:examtime/common_widget/emailWidget.dart';
-import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/landing_screen/notification.dart';
-import 'package:examtime/screens/landing_screen/navbar.dart';
 import 'package:examtime/screens/landing_screen/drawer.dart';
+import 'package:examtime/screens/landing_screen/navbar.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -108,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _email,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 SizedBox(height: 16),

@@ -1,21 +1,25 @@
-import 'dart:developer';
-
-import 'package:examtime/services/SharedServices/Preferences.dart';
-import 'package:examtime/services/SharedServices/Sharedservices.dart';
-import 'package:examtime/screens/request_notes/request.dart';
-import 'package:flutter/material.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/liked_notes/liked.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
+import 'package:examtime/screens/landing_screen/dashboard.dart';
+import 'package:examtime/screens/liked_notes/liked.dart';
 import 'package:examtime/screens/profile/profile.dart';
+import 'package:examtime/screens/request_notes/request.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
+import 'package:examtime/services/SharedServices/Sharedservices.dart';
+import 'package:examtime/theme/theme_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   preferences = await SharedPreferences.getInstance();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (context) => ThemeProvider(),
+    child: const MyApp(),
+    )
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,9 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ExamTime',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF1F2937),
-      ),
+      //themeMode: ThemeMode.system,
+      theme: Provider.of<ThemeProvider>(context).themeData,
       initialRoute: '/',
       routes: {
         '/': (context) => LoadingScreen(),
@@ -91,7 +94,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _backgroundColorAnimation.value ?? Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

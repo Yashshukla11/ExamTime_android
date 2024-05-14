@@ -1,8 +1,11 @@
 import 'dart:ui';
-import 'package:examtime/services/SharedServices/Sharedservices.dart';
-import 'package:flutter/material.dart';
+
 import 'package:examtime/screens/profile/profile.dart';
-import 'package:flutter/widgets.dart';
+import 'package:examtime/services/SharedServices/Sharedservices.dart';
+import 'package:examtime/theme/theme_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../auth_screen/signin.dart';
 import '../liked_notes/liked.dart';
 import '../request_notes/request.dart';
@@ -14,7 +17,7 @@ class AppDrawer extends StatelessWidget {
     var media = MediaQuery.of(context).size;
     return Drawer(
         width: media.width,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.background,
         child: BackdropFilter(
             filter: ImageFilter.blur(
               sigmaX: 5.0,
@@ -26,7 +29,7 @@ class AppDrawer extends StatelessWidget {
               ),
               Container(
                 width: media.width * 0.70,
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
                 child: SafeArea(
                   child: Padding(
                     padding: EdgeInsets.all(45),
@@ -49,13 +52,12 @@ class AppDrawer extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 20),
+                                const SizedBox(width: 20),
                                 Expanded(
                                   child: Text(
                                     'John Doe',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -67,8 +69,7 @@ class AppDrawer extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
-                        const Divider(
-                          color: Colors.black26,
+                        Divider(
                           height: 1,
                         ),
                         Expanded(
@@ -119,6 +120,16 @@ class AppDrawer extends StatelessWidget {
                                 height: 15,
                               ),
                               ListTile(
+                                leading: Icon(Icons.lightbulb),
+                                title: Text('Change Mode'),
+                                onTap: () {
+                              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              ListTile(
                                 leading: Icon(Icons.logout),
                                 title: Text('Logout'),
                                 onTap: () {
@@ -131,7 +142,6 @@ class AppDrawer extends StatelessWidget {
                           ),
                         ),
                         const Divider(
-                          color: Colors.black26,
                           height: 1,
                         ),
                         const SizedBox(
@@ -148,7 +158,6 @@ class AppDrawer extends StatelessWidget {
                                   "Switch Account",
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w700),
                                 ),
                                 Padding(
