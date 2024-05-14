@@ -1,10 +1,13 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
 import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:dio/dio.dart';
+import 'package:examtime/model/notes.dart';
+import 'package:examtime/screens/landing_screen/popupdetail.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -12,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../model/user.dart';
 import '../../services/SharedServices/Sharedservices.dart';
@@ -52,10 +56,10 @@ class _DashboardPageState extends State<DashboardPage> {
     fetchNotes();
     initNotification(); // Call initNotification here
   }
-
   @override
   Widget build(BuildContext context) {
 
+    List<bool> likedStatus = List.generate(notes.length, (index) => false);
     return WillPopScope(
       onWillPop: () async {
         return false; // Disables the back button
@@ -67,6 +71,9 @@ class _DashboardPageState extends State<DashboardPage> {
         :notes.isEmpty?const Center(child: Text("No notes are available"),):ListView.builder(
           itemCount: notes.length,
           itemBuilder: (BuildContext context, int index) {
+            if (likedStatus.length <= index) {
+              likedStatus.add(false);
+            }
             return GestureDetector(
               onTap: ()  {
                 Navigator.push(
@@ -92,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     FadeInImage(
                       image: NetworkImage(
@@ -103,15 +110,34 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     Divider(), // Horizontal line to separate notes
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           notes[index]["title"],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        IconButton(
+                          icon: Icon(
+                            likedStatus[index]
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color:
+                                likedStatus[index] ? Colors.red : Colors.grey,
+                          ),
+                          onPressed: () {
+                            _toggleLikedStatus(index, likedStatus);
+                          },
+                        ),
+                        // SizedBox(width: 18),
+                        IconButton(
+                            onPressed: () {
+                              shareDownloadedPdf(notes[index]["pdfUrl"],
+                                  notes[index]["title"]);
+                            },
+                            icon: Icon(Icons.share_outlined)),
                         IconButton(
                           icon: const Icon(Icons.download),
                           onPressed: () async {
@@ -148,6 +174,24 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Future<void> shareDownloadedPdf(String pdfUrl, String title) async {
+    try {
+      final fileName = "$title.pdf";
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final filePath = "${appDocDir.path}/$fileName";
+
+      final response = await Dio().download(pdfUrl, filePath);
+      if (response.statusCode == 200) {
+        final xFile = XFile(filePath);
+        await Share.shareXFiles([xFile]);
+      } else {
+        print("Problem in Downloading a file For sharing");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
     showDialog(
       context: context,
@@ -156,9 +200,58 @@ class _DashboardPageState extends State<DashboardPage> {
           title: note["title"],
           description: note["description"],
           pdfUrl: note["pdfUrl"],
+          setController: (PDFViewController, TextEditingController) {},
         );
       },
     );
+
+    // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return PopupDetail(
+    //         title: note["title"],
+    //         description: note["description"],
+    //         pdfUrl: note["pdfUrl"],
+    //       );
+    //     },
+    //   );
+    // }
+  }
+
+  Future<void> initNotification() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('notification_icon');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+      onDidReceiveBackgroundNotificationResponse:
+          (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+    );
+  }
+
+  void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await DashboardPage().initNotification(); // Initialize notifications
+    runApp(MaterialApp(
+      home: DashboardPage(),
+    ));
+  }
+
+  void _toggleLikedStatus(int index, List<bool> likedStatus) {
+    List<bool> updatedStatus = List.from(likedStatus);
+    updatedStatus[index] = !updatedStatus[index];
+    likedStatus.replaceRange(0, likedStatus.length, updatedStatus);
   }
 
   Future<String?> getDownloadPath() async {
@@ -186,6 +279,31 @@ class _DashboardPageState extends State<DashboardPage> {
         filePath); // Show download complete notification
   }
 
+  void _sendDownloadCompleteNotification(String filePath) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'download_channel_id',
+      'Download Channel',
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // Cancel the ongoing download notification
+    await flutterLocalNotificationsPlugin.cancel(0);
+
+    // Show download complete notification
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Download Complete',
+      'Your file has been downloaded',
+      platformChannelSpecifics,
+      payload: filePath,
+    );
+  }
+
   void _sendDownloadNotification(String filePath) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -210,31 +328,6 @@ class _DashboardPageState extends State<DashboardPage> {
       0,
       'Download in progress',
       'Your file is downloading...',
-      platformChannelSpecifics,
-      payload: filePath,
-    );
-  }
-
-  void _sendDownloadCompleteNotification(String filePath) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'download_channel_id',
-      'Download Channel',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    // Cancel the ongoing download notification
-    await flutterLocalNotificationsPlugin.cancel(0);
-
-    // Show download complete notification
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Download Complete',
-      'Your file has been downloaded',
       platformChannelSpecifics,
       payload: filePath,
     );
