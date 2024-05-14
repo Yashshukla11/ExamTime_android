@@ -1,3 +1,5 @@
+import 'dart:io';
+
 // import 'dart:convert';
 // import 'package:dio/dio.dart';
 // import 'package:examtime/model/notes.dart';
@@ -541,22 +543,20 @@ import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:examtime/services/notification_service.dart';
 import 'package:dio/dio.dart';
-import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io';
-import 'package:open_file/open_file.dart';
 import 'package:share_plus/share_plus.dart';
 
+import 'drawer.dart';
 import '../../model/user.dart';
 import '../../services/SharedServices/Sharedservices.dart';
 import 'navbar.dart';
-import 'drawer.dart';
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -622,6 +622,7 @@ class _DashboardPageState extends State<DashboardPage> {
         return false; // Disables the back button
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: const CommonNavBar(),
         drawer: AppDrawer(), // Use the CommonNavBar as the app bar
         body: isLoading

@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'dashboard.dart';
+import 'package:flutter/material.dart';
+
 import 'notification.dart';
 
 class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,11 +11,10 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
 
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: theme.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       centerTitle: true,
       title: Row(
         children: [
@@ -60,8 +58,7 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
                     items: [
                       PopupMenuItem(
                         child: Container(
-                          color: Colors.white,
-                          // Set the background color to white
+                          color: Theme.of(context).colorScheme.background,
                           child: NotificationPage(),
                         ),
                       ),
