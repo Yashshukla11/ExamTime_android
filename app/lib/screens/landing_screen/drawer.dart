@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:examtime/model/user.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/profile/profile.dart';
@@ -26,15 +27,15 @@ class AppDrawer extends StatelessWidget {
               ),
               Container(
                 width: media.width * 0.70,
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: const BoxDecoration(color: Colors.white),
                 child: SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.all(45),
+                    padding: const EdgeInsets.all(45),
                     child: Column(
                       children: [
                         GestureDetector(
                           onTap: () {},
-                          child: Container(
+                          child: SizedBox(
                             height: kTextTabBarHeight,
                             child: Row(
                               children: [
@@ -44,7 +45,7 @@ class AppDrawer extends StatelessWidget {
                                   foregroundColor: Colors.transparent,
                                   child: ClipOval(
                                     child: Image.network(
-                                      'https://i.postimg.cc/2SMLF3mb/man.png',
+                                      SharedServices.getLoginDetails()?.user?.userPhoto??'https://i.postimg.cc/2SMLF3mb/man.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -52,7 +53,7 @@ class AppDrawer extends StatelessWidget {
                                 SizedBox(width: 20),
                                 Expanded(
                                   child: Text(
-                                    'John Doe',
+                                    SharedServices.getLoginDetails()?.user?.username??'user name',
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.black,
@@ -167,4 +168,6 @@ class AppDrawer extends StatelessWidget {
               ),
             ])));
   }
+
+
 }
