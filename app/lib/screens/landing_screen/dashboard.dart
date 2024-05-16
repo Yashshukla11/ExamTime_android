@@ -5,6 +5,7 @@ import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
 import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:examtime/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -33,13 +34,12 @@ class _DashboardPageState extends State<DashboardPage> {
   List< dynamic> notes =[];
   User ? user;
   bool isLoading=true;
-
   fetchNotes()async{
     if(SharedServices.isLoggedIn()){
-      Response res=await Apiservices.fetchUserData();
-      user=User.fromJson(jsonDecode(jsonEncode(res.data)));
-      notes=user!.notes!;
+      Response res=await Apiservices.fetchNotes();
+      notes=jsonDecode(jsonEncode(res.data));
       isLoading=false;
+     // print(notes);
       setState(() {});
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
@@ -50,7 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     fetchNotes();
-    initNotification(); // Call initNotification here
   }
 
   @override
@@ -93,11 +92,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FadeInImage(
+                    const FadeInImage(
                       image: NetworkImage(
                           'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
                       fit: BoxFit.cover,
-                      placeholder: const NetworkImage(
+                      placeholder: NetworkImage(
                           'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
                     ),
                     Divider(), // Horizontal line to separate notes
@@ -105,7 +104,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          notes[index]["title"],
+                          notes[index]['title'],
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -122,13 +121,13 @@ class _DashboardPageState extends State<DashboardPage> {
                             if (downloadPath != null) {
                               var filePath =
                                   '$downloadPath/${notes[index]["title"]}.pdf';
-                              _sendDownloadNotification(
-                                  filePath); // Show initial notification
+                              LocalNotificationService().sendDownloadNotification(
+                                  filePath,notes[index]["title"]); // Show initial notification
                               await _startDownload(
-                                  notes[index]["pdfUrl"], filePath);
+                                  notes[index]["fileUrl"]??"", filePath,notes[index]["title"]);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                     content:
                                         Text('Could not get download path')),
                               );
@@ -145,6 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+
   }
 
   void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
@@ -168,8 +168,9 @@ class _DashboardPageState extends State<DashboardPage> {
       } else {
         directory = Directory('/storage/emulated/0/Download');
 
-        if (!await directory.exists())
+        if (!await directory.exists()) {
           directory = await getExternalStorageDirectory();
+        }
       }
     } catch (err, stack) {
       print("Cannot get download folder path");
@@ -177,92 +178,11 @@ class _DashboardPageState extends State<DashboardPage> {
     return directory?.path;
   }
 
-  Future<void> _startDownload(String url, String filePath) async {
+  Future<void> _startDownload(String url, String filePath,String fileName) async {
     var response = await http.get(Uri.parse(url));
     var file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
-    _sendDownloadCompleteNotification(
-        filePath); // Show download complete notification
+    LocalNotificationService().sendDownloadCompleteNotification(
+        filePath,fileName); // Show download complete notification
   }
-
-  void _sendDownloadNotification(String filePath) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'download_channel_id',
-      'Download Channel',
-
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-      // Specify the small icon resource here
-      showProgress: true,
-      // Show download progress
-      maxProgress: 100,
-      // Max progress value
-      indeterminate: false, // Make the progress bar determinate
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    // Show initial download notification
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Download in progress',
-      'Your file is downloading...',
-      platformChannelSpecifics,
-      payload: filePath,
-    );
-  }
-
-  void _sendDownloadCompleteNotification(String filePath) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'download_channel_id',
-      'Download Channel',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    // Cancel the ongoing download notification
-    await flutterLocalNotificationsPlugin.cancel(0);
-
-    // Show download complete notification
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Download Complete',
-      'Your file has been downloaded',
-      platformChannelSpecifics,
-      payload: filePath,
-    );
-  }
-  Future<void>  initNotification() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
-    final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-      onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-    );
-  }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-    home: DashboardPage(),
-  ));
 }
