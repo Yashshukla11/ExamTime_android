@@ -93,4 +93,10 @@ class Apiservices {
     );
     return res;
   }
+  static Future<Response> fetchNotes() async {
+    Response res = await ApiBaseServices.getRequestWithHeaders(
+      endPoint: "/note",
+    );
+    return res;
+  }
 }

@@ -1,8 +1,4 @@
 
-W
-'app/lib/screens/auth_screen/signup.dart,f\9\f9ecd45652880c432ef9bc3717411ba1bbcad91f
-A
-app/lib/main.dart,9\9\99e14883a0b77ddb8107df3445f7313d9bd84cf3
 Z
 *app/lib/screens/landing_screen/navbar.dart,e\2\e252570a660ebc14361175b3d8ac8ed083bbe453
 ?
@@ -17,3 +13,13 @@ G
 app/lib/model/user.dart,e\2\e26f5a170f5adb60f1c596df95c210211bee01d0
 Z
 *app/lib/screens/landing_screen/drawer.dart,b\f\bf11b276b01c802a104a21159a7aeb85eea8fa4f
+a
+1app/lib/services/ApiServices/ApiBaseServices.dart,d\9\d9c5a59b90cc937a8b9b497c169e8ebf77993c4f
+T
+$app/lib/screens/profile/profile.dart,c\5\c53296eb7eadf4e6bf560f3ae8a90f020ed6d63f
+c
+3app/lib/services/SharedServices/Sharedservices.dart,7\c\7c142ef61765b1ffcc2eedc7231e5329e2bea4f6
+@
+app/pubspec.yaml,b\2\b215b30459807feffb97f76955821637a8212743
+\
+,app/android/app/src/main/AndroidManifest.xml,2\a\2a6757fba9063f5ec0d18fef1228a67d6f3c4d10
