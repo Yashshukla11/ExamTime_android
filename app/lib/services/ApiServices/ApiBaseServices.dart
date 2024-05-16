@@ -42,19 +42,19 @@ class ApiBaseServices {
     return response;
   }
 
-  //get requestwith headers
+  //get request with headers
   static Future<Response> getRequestWithHeaders({
     required String endPoint,
   }) async {
     Map<String, String> newHeaders = {};
-    Map<String, String> conentType = {'Content-Type': 'application/json'};
-    newHeaders.addAll(conentType);
+    Map<String, String> contentType = { 'Content-Type': 'application/json' };
+    newHeaders.addAll(contentType);
     if (SharedServices.isLoggedIn()) {
       UserModel? model = SharedServices.getLoginDetails();
       String token = model!.token.toString();
-      newHeaders.addAll({'Authorization': token});
+      newHeaders.addAll( {'Authorization': 'Bearer $token'});
     }
-    log("newheaders$newHeaders");
+    log("newheaders: $newHeaders");
     final response = await dio.get(
       url(extendedURL: endPoint),
       options: Options(

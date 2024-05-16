@@ -1,6 +1,13 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
+import 'package:examtime/screens/note_preview/preview_note_screen.dart';
+import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:dio/dio.dart';
+import 'package:examtime/model/notes.dart';
+import 'package:examtime/screens/landing_screen/popupdetail.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -10,53 +17,47 @@ import 'dart:io';
 import 'package:open_file/open_file.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../model/user.dart';
+import '../../services/SharedServices/Sharedservices.dart';
 import 'navbar.dart';
 import 'drawer.dart';
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   static const String routeName = '/dashboard';
 
-  DashboardPage({Key? key}) : super(key: key);
+   DashboardPage({Key? key}) : super(key: key);
 
   @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  List< dynamic> notes =[];
+  User ? user;
+  bool isLoading=true;
+
+  fetchNotes()async{
+    if(SharedServices.isLoggedIn()){
+      Response res=await Apiservices.fetchUserData();
+      user=User.fromJson(jsonDecode(jsonEncode(res.data)));
+      notes=user!.notes!;
+      isLoading=false;
+      setState(() {});
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred : please logout and login again ")));
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    fetchNotes();
+    initNotification(); // Call initNotification here
+  }
+  @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> notes = [
-      {
-        "pdfUrl":
-            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
-        "title": "Note 1",
-        "description": "Description of Note 1",
-      },
-      {
-        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
-        "title": "Note 2",
-        "description": "Description of Note 2",
-      },
-      {
-        "pdfUrl":
-            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
-        "title": "Note 1",
-        "description": "Description of Note 1",
-      },
-      {
-        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
-        "title": "Note 2",
-        "description": "Description of Note 2",
-      },
-      {
-        "pdfUrl":
-            "https://www.yesterdaysclassics.com/previews/burt_poems_preview.pdf",
-        "title": "Note 1",
-        "description": "Description of Note 1",
-      },
-      {
-        "pdfUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
-        "title": "Note 2",
-        "description": "Description of Note 2",
-      },
-    ];
 
     List<bool> likedStatus = List.generate(notes.length, (index) => false);
     return WillPopScope(
@@ -64,21 +65,27 @@ class DashboardPage extends StatelessWidget {
         return false; // Disables the back button
       },
       child: Scaffold(
-        appBar: CommonNavBar(),
+        appBar: const CommonNavBar(),
         drawer: AppDrawer(), // Use the CommonNavBar as the app bar
-        body: ListView.builder(
+        body: isLoading?const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),)
+        :notes.isEmpty?const Center(child: Text("No notes are available"),):ListView.builder(
           itemCount: notes.length,
           itemBuilder: (BuildContext context, int index) {
             if (likedStatus.length <= index) {
               likedStatus.add(false);
             }
             return GestureDetector(
-              onTap: () {
-                _showNoteDetails(context, notes[index]);
+              onTap: ()  {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PreviewNoteScreen(Notes.fromMap(notes[index]))
+                  ),
+                );
               },
               child: Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -87,7 +94,7 @@ class DashboardPage extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -325,4 +332,31 @@ class DashboardPage extends StatelessWidget {
       payload: filePath,
     );
   }
+  Future<void>  initNotification() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('notification_icon');
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+      onDidReceiveBackgroundNotificationResponse:
+          (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+    );
+  }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MaterialApp(
+    home: DashboardPage(),
+  ));
 }
