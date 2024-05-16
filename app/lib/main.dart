@@ -13,6 +13,7 @@ import 'package:examtime/screens/auth_screen/signup.dart';
 import 'package:examtime/screens/profile/profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:examtime/screens/auth_screen/otp.dart';
 
  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -46,12 +47,14 @@ class MyApp extends StatelessWidget {
         ProfileScreen.routeName: (context) => ProfileScreen(),
         LikedNotesPage.routeName: (context) => LikedNotesPage(),
         RequestNotesPage.routeName: (context) => RequestNotesPage(),
+        OTPPage.routeName:(context)=>OTPPage(),
       },
     );
   }
 }
 
 class LoadingScreen extends StatefulWidget {
+
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override

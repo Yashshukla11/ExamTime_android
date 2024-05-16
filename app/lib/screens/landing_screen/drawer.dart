@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
                 decoration: const BoxDecoration(color: Colors.white),
                 child: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.all(45),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       children: [
                         GestureDetector(
@@ -45,7 +45,10 @@ class AppDrawer extends StatelessWidget {
                                   foregroundColor: Colors.transparent,
                                   child: ClipOval(
                                     child: Image.network(
-                                      SharedServices.getLoginDetails()?.user?.userPhoto??'https://i.postimg.cc/2SMLF3mb/man.png',
+                                      SharedServices.getLoginDetails()
+                                              ?.user
+                                              ?.userPhoto ??
+                                          'https://i.postimg.cc/2SMLF3mb/man.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -53,8 +56,11 @@ class AppDrawer extends StatelessWidget {
                                 SizedBox(width: 20),
                                 Expanded(
                                   child: Text(
-                                    SharedServices.getLoginDetails()?.user?.username??'user name',
-                                    style: TextStyle(
+                                    SharedServices.getLoginDetails()
+                                            ?.user
+                                            ?.username ??
+                                        'user name',
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
@@ -65,7 +71,7 @@ class AppDrawer extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         const Divider(
@@ -76,8 +82,8 @@ class AppDrawer extends StatelessWidget {
                           child: Column(
                             children: [
                               ListTile(
-                                leading: Icon(Icons.home),
-                                title: Text('Home'),
+                                leading: const Icon(Icons.home),
+                                title: const Text('Home'),
                                 onTap: () {
                                   Navigator.pushNamed(
                                       context, DashboardPage.routeName);
@@ -88,7 +94,7 @@ class AppDrawer extends StatelessWidget {
                               ),
                               ListTile(
                                 leading: Icon(Icons.account_circle),
-                                title: Text('My Profile'),
+                                title: const Text('My Profile'),
                                 onTap: () {
                                   Navigator.pushNamed(
                                       context, ProfileScreen.routeName);
@@ -152,11 +158,8 @@ class AppDrawer extends StatelessWidget {
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Image.asset("assets/img/next.png",
-                                      width: 18, height: 18),
-                                )
+                                Image.asset("assets/img/next.png",
+                                    width: 18, height: 18)
                               ],
                             ),
                           ),
@@ -168,6 +171,4 @@ class AppDrawer extends StatelessWidget {
               ),
             ])));
   }
-
-
 }
