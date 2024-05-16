@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/screens/request_notes/request.dart';
+import 'package:examtime/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
 import 'package:examtime/screens/liked_notes/liked.dart';
@@ -10,13 +11,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
 import 'package:examtime/screens/profile/profile.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:examtime/screens/auth_screen/otp.dart';
 
+ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotificationService().init();
   preferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
+}
+Future<void> backgroundHandler() async {
+  print("Handling a background message: ");
 }
 
 class MyApp extends StatelessWidget {
@@ -81,7 +89,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _backgroundColorAnimation = ColorTween(
-      begin: Color(0xFF1F2937),
+      begin: const Color(0xFF1F2937),
       end: Theme.of(context).primaryColor,
     ).animate(_animationController);
   }

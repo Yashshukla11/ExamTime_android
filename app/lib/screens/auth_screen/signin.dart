@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   CachedNetworkImage(
                     imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    placeholder: (context, url) => const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     width: 200,
                     height: 150,
@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Login'),
+                    child: const Text('Login'),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
