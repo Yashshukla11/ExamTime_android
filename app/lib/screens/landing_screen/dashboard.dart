@@ -27,38 +27,60 @@ final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 class DashboardPage extends StatefulWidget {
   static const String routeName = '/dashboard';
 
-   DashboardPage({Key? key}) : super(key: key);
+  DashboardPage({Key? key}) : super(key: key);
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
+
+  Future<void> initNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('notification_icon');
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+      onDidReceiveBackgroundNotificationResponse:
+          (NotificationResponse response) async {
+        // Use the response object here
+        // For example, to open a file:
+        await OpenFile.open(response.payload);
+      },
+    );
+  }
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  List< dynamic> notes =[];
-  User ? user;
-  bool isLoading=true;
+  List<dynamic> notes = [];
+  User? user;
+  bool isLoading = true;
 
-  fetchNotes()async{
-    if(SharedServices.isLoggedIn()){
-      Response res=await Apiservices.fetchUserData();
-      user=User.fromJson(jsonDecode(jsonEncode(res.data)));
-      notes=user!.notes!;
-      isLoading=false;
+  fetchNotes() async {
+    if (SharedServices.isLoggedIn()) {
+      Response res = await Apiservices.fetchUserData();
+      user = User.fromJson(jsonDecode(jsonEncode(res.data)));
+      notes = user!.notes!;
+      isLoading = false;
       setState(() {});
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Error occurred : please logout and login again ")));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error occurred : please logout and login again ")));
     }
   }
+
   @override
   void initState() {
     super.initState();
     fetchNotes();
     initNotification(); // Call initNotification here
   }
+
   @override
   Widget build(BuildContext context) {
-
     List<bool> likedStatus = List.generate(notes.length, (index) => false);
     return WillPopScope(
       onWillPop: () async {
@@ -67,20 +89,30 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         appBar: const CommonNavBar(),
         drawer: AppDrawer(), // Use the CommonNavBar as the app bar
-        body: isLoading?const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),)
-        :notes.isEmpty?const Center(child: Text("No notes are available"),):ListView.builder(
+        body: isLoading
+            ? const Center(
+          child: CircularProgressIndicator(
+            color: Colors.blue,
+            strokeWidth: 2,
+          ),
+        )
+            : notes.isEmpty
+            ? const Center(
+          child: Text("No notes are available"),
+        )
+            : ListView.builder(
           itemCount: notes.length,
           itemBuilder: (BuildContext context, int index) {
             if (likedStatus.length <= index) {
               likedStatus.add(false);
             }
             return GestureDetector(
-              onTap: ()  {
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PreviewNoteScreen(Notes.fromMap(notes[index]))
-                  ),
+                      builder: (context) => PreviewNoteScreen(
+                          Notes.fromMap(notes[index]))),
                 );
               },
               child: Container(
@@ -110,7 +142,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     Divider(), // Horizontal line to separate notes
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           notes[index]["title"],
@@ -124,8 +157,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             likedStatus[index]
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color:
-                                likedStatus[index] ? Colors.red : Colors.grey,
+                            color: likedStatus[index]
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                           onPressed: () {
                             _toggleLikedStatus(index, likedStatus);
@@ -134,18 +168,21 @@ class _DashboardPageState extends State<DashboardPage> {
                         // SizedBox(width: 18),
                         IconButton(
                             onPressed: () {
-                              shareDownloadedPdf(notes[index]["pdfUrl"],
+                              shareDownloadedPdf(
+                                  notes[index]["pdfUrl"],
                                   notes[index]["title"]);
                             },
                             icon: Icon(Icons.share_outlined)),
                         IconButton(
                           icon: const Icon(Icons.download),
                           onPressed: () async {
-                            var status = await Permission.storage.status;
+                            var status =
+                            await Permission.storage.status;
                             if (!status.isGranted) {
                               await Permission.storage.request();
                             }
-                            var downloadPath = await getDownloadPath();
+                            var downloadPath =
+                            await getDownloadPath();
                             if (downloadPath != null) {
                               var filePath =
                                   '$downloadPath/${notes[index]["title"]}.pdf';
@@ -154,10 +191,11 @@ class _DashboardPageState extends State<DashboardPage> {
                               await _startDownload(
                                   notes[index]["pdfUrl"], filePath);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
                                 SnackBar(
-                                    content:
-                                        Text('Could not get download path')),
+                                    content: Text(
+                                        'Could not get download path')),
                               );
                             }
                           },
@@ -221,9 +259,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> initNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('notification_icon');
+    AndroidInitializationSettings('notification_icon');
     final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
@@ -242,7 +280,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void main() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await DashboardPage().initNotification(); // Initialize notifications
+    await DashboardPage().initNotifications(); // Initialize notifications
     runApp(MaterialApp(
       home: DashboardPage(),
     ));
@@ -281,7 +319,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _sendDownloadCompleteNotification(String filePath) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    AndroidNotificationDetails(
       'download_channel_id',
       'Download Channel',
       importance: Importance.max,
@@ -289,7 +327,7 @@ class _DashboardPageState extends State<DashboardPage> {
       icon: '@mipmap/ic_launcher',
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    NotificationDetails(android: androidPlatformChannelSpecifics);
 
     // Cancel the ongoing download notification
     await flutterLocalNotificationsPlugin.cancel(0);
@@ -306,7 +344,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _sendDownloadNotification(String filePath) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    AndroidNotificationDetails(
       'download_channel_id',
       'Download Channel',
 
@@ -321,7 +359,7 @@ class _DashboardPageState extends State<DashboardPage> {
       indeterminate: false, // Make the progress bar determinate
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    NotificationDetails(android: androidPlatformChannelSpecifics);
 
     // Show initial download notification
     await flutterLocalNotificationsPlugin.show(
@@ -332,26 +370,27 @@ class _DashboardPageState extends State<DashboardPage> {
       payload: filePath,
     );
   }
-  Future<void>  initNotification() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
-    final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-      onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-    );
-  }
+
+// Future<void> initNotifications() async {
+//   const AndroidInitializationSettings initializationSettingsAndroid =
+//       AndroidInitializationSettings('notification_icon');
+//   final InitializationSettings initializationSettings =
+//       InitializationSettings(android: initializationSettingsAndroid);
+//   await flutterLocalNotificationsPlugin.initialize(
+//     initializationSettings,
+//     onDidReceiveNotificationResponse: (NotificationResponse response) async {
+//       // Use the response object here
+//       // For example, to open a file:
+//       await OpenFile.open(response.payload);
+//     },
+//     onDidReceiveBackgroundNotificationResponse:
+//         (NotificationResponse response) async {
+//       // Use the response object here
+//       // For example, to open a file:
+//       await OpenFile.open(response.payload);
+//     },
+//   );
+// }
 }
 
 void main() async {
