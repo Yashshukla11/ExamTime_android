@@ -35,9 +35,9 @@ class DashboardPage extends StatefulWidget {
 
   Future<void> initNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
+        AndroidInitializationSettings('notification_icon');
     final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
@@ -56,15 +56,16 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  List< dynamic> notes =[];
-  User ? user;
-  bool isLoading=true;
-  fetchNotes()async{
-    if(SharedServices.isLoggedIn()){
-      Response res=await Apiservices.fetchNotes();
-      notes=jsonDecode(jsonEncode(res.data));
-      isLoading=false;
-     // print(notes);
+  List<dynamic> notes = [];
+  User? user;
+  bool isLoading = true;
+
+  fetchNotes() async {
+    if (SharedServices.isLoggedIn()) {
+      Response res = await Apiservices.fetchNotes();
+      notes = jsonDecode(jsonEncode(res.data));
+      isLoading = false;
+      // print(notes);
       setState(() {});
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -90,122 +91,131 @@ class _DashboardPageState extends State<DashboardPage> {
         drawer: AppDrawer(), // Use the CommonNavBar as the app bar
         body: isLoading
             ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.blue,
-            strokeWidth: 2,
-          ),
-        )
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                  strokeWidth: 2,
+                ),
+              )
             : notes.isEmpty
-            ? const Center(
-          child: Text("No notes are available"),
-        )
-            : ListView.builder(
-          itemCount: notes.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (likedStatus.length <= index) {
-              likedStatus.add(false);
-            }
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PreviewNoteScreen(
-                          Notes.fromMap(notes[index]))),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.all(20),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const FadeInImage(
-                      image: NetworkImage(
-                          'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
-                      fit: BoxFit.cover,
-                      placeholder: NetworkImage(
-                          'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
-                    ),
-                    Divider(), // Horizontal line to separate notes
-                    Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          notes[index]["title"],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                ? const Center(
+                    child: Text("No notes are available"),
+                  )
+                : ListView.builder(
+                    itemCount: notes.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (likedStatus.length <= index) {
+                        likedStatus.add(false);
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PreviewNoteScreen(
+                                    Notes.fromMap(notes[index]))),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              const FadeInImage(
+                                image: NetworkImage(
+                                    'https://i.postimg.cc/43FzYStQ/pexels-cottonbro-3831847.jpg'),
+                                fit: BoxFit.cover,
+                                placeholder: NetworkImage(
+                                    'https://placehold.jp/3d4070/ffffff/300x300.png?css=%7B%22border-radius%22%3A%2215px%22%7D'),
+                              ),
+                              Divider(), // Horizontal line to separate notes
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                      notes[index]["title"],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      likedStatus[index]
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: likedStatus[index]
+                                          ? Colors.red
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      _toggleLikedStatus(index, likedStatus);
+                                    },
+                                  ),
+                                  // SizedBox(width: 18),
+                                  IconButton(
+                                      onPressed: () {
+                                        shareDownloadedPdf(
+                                            notes[index]["pdfUrl"],
+                                            notes[index]["title"]);
+                                      },
+                                      icon: Icon(Icons.share_outlined)),
+                                  IconButton(
+                                    icon: const Icon(Icons.download),
+                                    onPressed: () async {
+                                      var status =
+                                          await Permission.storage.status;
+                                      if (!status.isGranted) {
+                                        await Permission.storage.request();
+                                      }
+                                      var downloadPath =
+                                          await getDownloadPath();
+                                      if (downloadPath != null) {
+                                        var filePath =
+                                            '$downloadPath/${notes[index]["title"]}.pdf';
+                                        LocalNotificationService()
+                                            .sendDownloadNotification(
+                                                filePath,
+                                                notes[index][
+                                                    "title"]); // Show initial notification
+                                        await _startDownload(
+                                            notes[index]["fileUrl"] ?? "",
+                                            filePath,
+                                            notes[index]["title"]);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Could not get download path')),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(
-                            likedStatus[index]
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: likedStatus[index]
-                                ? Colors.red
-                                : Colors.grey,
-                          ),
-                          onPressed: () {
-                            _toggleLikedStatus(index, likedStatus);
-                          },
-                        ),
-                        // SizedBox(width: 18),
-                        IconButton(
-                            onPressed: () {
-                              shareDownloadedPdf(
-                                  notes[index]["pdfUrl"],
-                                  notes[index]["title"]);
-                            },
-                            icon: Icon(Icons.share_outlined)),
-                        IconButton(
-                          icon: const Icon(Icons.download),
-                          onPressed: () async {
-                            var status =
-                            await Permission.storage.status;
-                            if (!status.isGranted) {
-                              await Permission.storage.request();
-                            }
-                            var downloadPath =
-                            await getDownloadPath();
-                            if (downloadPath != null) {
-                              var filePath =
-                                  '$downloadPath/${notes[index]["title"]}.pdf';
-                              LocalNotificationService().sendDownloadNotification(
-                                  filePath,notes[index]["title"]); // Show initial notification
-                              await _startDownload(
-                                  notes[index]["fileUrl"]??"", filePath,notes[index]["title"]);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Could not get download path')),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+                      );
+                    },
+                  ),
       ),
     );
   }
@@ -257,9 +267,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> initNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
+        AndroidInitializationSettings('notification_icon');
     final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
@@ -308,11 +318,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return directory?.path;
   }
 
-  Future<void> _startDownload(String url, String filePath,String fileName) async {
+  Future<void> _startDownload(
+      String url, String filePath, String fileName) async {
     var response = await http.get(Uri.parse(url));
     var file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
     LocalNotificationService().sendDownloadCompleteNotification(
-        filePath,fileName); // Show download complete notification
+        filePath, fileName); // Show download complete notification
   }
 }
