@@ -40,7 +40,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   CachedNetworkImage(
                     imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    placeholder: (context, url) => const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     width: 200,
                     height: 150,
@@ -99,11 +99,15 @@ class LoginPage extends StatelessWidget {
                       child: const Text('Login'),
                     ),
 
+
+
+
+ 
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
+                        builder: (context) => const SignUpPage(),
                       ));
                     },
                     child: const Text(

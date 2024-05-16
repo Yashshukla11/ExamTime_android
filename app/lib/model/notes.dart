@@ -11,13 +11,13 @@ class Notes {
     var map = <String, dynamic>{};
     map['title'] = title;
     map['description'] = description;
-    map['pdfUrl'] = pdfUrl;
+    map['fileUrl'] = pdfUrl;
     return map;
   }
   // Extract a Note object from a Map object
   Notes.fromMap(Map<String, dynamic> map) {
-    title = map['title'];
-    description = map['description'];
-    pdfUrl = map['pdfUrl'];
+    title = map['title']??"no title available";
+    description = map['description']??"no description available";
+    pdfUrl = map['fileUrl']??"no pdfUrl available";
   }
 }

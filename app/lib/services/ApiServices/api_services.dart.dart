@@ -86,4 +86,17 @@ class Apiservices {
     }
     return isSign;
   }
+
+  static Future<Response> fetchUserData() async {
+    Response res = await ApiBaseServices.getRequestWithHeaders(
+      endPoint: "/user/get",
+    );
+    return res;
+  }
+  static Future<Response> fetchNotes() async {
+    Response res = await ApiBaseServices.getRequestWithHeaders(
+      endPoint: "/note",
+    );
+    return res;
+  }
 }
