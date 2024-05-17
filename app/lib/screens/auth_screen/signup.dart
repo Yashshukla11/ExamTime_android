@@ -1,9 +1,8 @@
 import 'dart:developer';
-
-import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'otp.dart';
 import 'signin.dart'; // Import your sign-in page here
 
 class SignUpPage extends StatefulWidget {
