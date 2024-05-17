@@ -22,17 +22,15 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: Container(
-              child: IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: Colors.white,
-                  size: 32.0,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
+            child: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 32.0,
               ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
           Expanded(
