@@ -1,3 +1,4 @@
+import 'package:examtime/screens/discussion/discussion.dart';
 import 'package:examtime/screens/request_notes/request.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ProfileScreen.routeName: (context) => ProfileScreen(),
         LikedNotesPage.routeName: (context) => LikedNotesPage(),
         RequestNotesPage.routeName: (context) => RequestNotesPage(),
+        DiscussionPage.routeName: (context) => DiscussionPage(),
       },
     );
   }

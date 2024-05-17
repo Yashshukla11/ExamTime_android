@@ -1,3 +1,4 @@
+import 'package:examtime/screens/discussion/discussion.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/profile/profile.dart';
 
@@ -78,6 +79,13 @@ class AppDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               Navigator.pushNamed(context, LoginPage.routeName);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.forum),
+            title: Text('Discuss'),
+            onTap: () {
+              Navigator.pushNamed(context, DiscussionPage.routeName);
             },
           ),
         ],
