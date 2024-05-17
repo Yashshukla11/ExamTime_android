@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/screens/request_notes/request.dart';
 import 'package:examtime/services/notification_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
 import 'package:examtime/screens/liked_notes/liked.dart';
@@ -24,7 +24,9 @@ void main() async {
   runApp(const MyApp());
 }
 Future<void> backgroundHandler() async {
-  print("Handling a background message: ");
+  if (kDebugMode) {
+    print("Handling a background message: ");
+  }
 }
 
 class MyApp extends StatelessWidget {
