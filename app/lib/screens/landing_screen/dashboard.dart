@@ -36,17 +36,18 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  List< dynamic> notes =[];
-  User ? user;
-  bool isLoading=true;
+  List<dynamic> notes = [];
+  User? user;
+  bool isLoading = true;
   List<String>likedNotes=[];
   List<String> likedStatus =[];
-  fetchNotes()async{
-    if(SharedServices.isLoggedIn()){
-      Response res=await Apiservices.fetchNotes();
-      notes=jsonDecode(jsonEncode(res.data));
-      isLoading=false;
-      if (kDebugMode) {
+
+  fetchNotes() async {
+    if (SharedServices.isLoggedIn()) {
+      Response res = await Apiservices.fetchNotes();
+      notes = jsonDecode(jsonEncode(res.data));
+      isLoading = false;
+       if (kDebugMode) {
        print(notes);
       }
     } else {
@@ -77,11 +78,11 @@ class _DashboardPageState extends State<DashboardPage> {
         drawer: AppDrawer(), // Use the CommonNavBar as the app bar
         body: isLoading
             ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.blue,
-            strokeWidth: 2,
-          ),
-        )
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                  strokeWidth: 2,
+                ),
+              )
             : notes.isEmpty
             ? const Center(
           child: Text("No notes are available"),
@@ -251,11 +252,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return directory?.path;
   }
 
-  Future<void> _startDownload(String url, String filePath,String fileName) async {
+  Future<void> _startDownload(
+      String url, String filePath, String fileName) async {
     var response = await http.get(Uri.parse(url));
     var file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
     LocalNotificationService().sendDownloadCompleteNotification(
-        filePath,fileName); // Show download complete notification
+        filePath, fileName); // Show download complete notification
   }
 }
