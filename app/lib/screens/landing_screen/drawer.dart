@@ -1,3 +1,4 @@
+import 'package:examtime/screens/discussion/discussion.dart';
 import 'dart:ui';
 import 'package:examtime/model/user.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
@@ -134,6 +135,13 @@ class AppDrawer extends StatelessWidget {
                                       context, LoginPage.routeName);
                                 },
                               ),
+															          ListTile(
+            leading: Icon(Icons.forum),
+            title: Text('Discuss'),
+            onTap: () {
+              Navigator.pushNamed(context, DiscussionPage.routeName);
+            },
+          ),
                             ],
                           ),
                         ),
@@ -169,6 +177,8 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-            ])));
+
+								            ])));
+
   }
 }
