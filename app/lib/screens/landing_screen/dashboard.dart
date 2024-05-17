@@ -32,27 +32,6 @@ class DashboardPage extends StatefulWidget {
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
-
-  Future<void> initNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
-    final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-      onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse response) async {
-        // Use the response object here
-        // For example, to open a file:
-        await OpenFile.open(response.payload);
-      },
-    );
-  }
 }
 
 class _DashboardPageState extends State<DashboardPage> {
@@ -228,32 +207,6 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PopupDetail(
-          title: note["title"],
-          description: note["description"],
-          pdfUrl: note["pdfUrl"],
-          setController: (PDFViewController, TextEditingController) {},
-        );
-      },
-    );
-
-    // void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return PopupDetail(
-    //         title: note["title"],
-    //         description: note["description"],
-    //         pdfUrl: note["pdfUrl"],
-    //       );
-    //     },
-    //   );
-    // }
-  }
 
   Future<void> initNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -274,14 +227,6 @@ class _DashboardPageState extends State<DashboardPage> {
         await OpenFile.open(response.payload);
       },
     );
-  }
-
-  void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await DashboardPage().initNotifications(); // Initialize notifications
-    runApp(MaterialApp(
-      home: DashboardPage(),
-    ));
   }
 
   void _toggleLikedStatus(int index, List<bool> likedStatus) {
