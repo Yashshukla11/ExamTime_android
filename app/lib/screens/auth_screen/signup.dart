@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -84,10 +85,17 @@ class SignUpPage extends StatelessWidget {
                               context: context)
                           .then((value) {
                         log(value.toString());
-                        if (value) {
+                        if (value['isSign']) {
+                          log("hlwww-----  " + value['token']);
+                          Apiservices.sendOtp(
+                            context,
+                            value['token'],
+                          );
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
+                              builder: (context) => OTPPage(
+                                token: value['token'],
+                              ),
                             ),
                           );
                         }

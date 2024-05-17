@@ -8,12 +8,13 @@ class PopupDetail extends StatefulWidget {
   final String title;
   final String description;
   final String pdfUrl;
-
-  const PopupDetail({
+  final Function(PDFViewController, TextEditingController) setController;
+  PopupDetail({
     Key? key,
     required this.title,
     required this.description,
     required this.pdfUrl,
+    required this.setController,
   }) : super(key: key);
 
   @override
@@ -55,16 +56,31 @@ class _PopupDetailState extends State<PopupDetail> {
     }
   }
 
+  TextEditingController pageNumberTextEditingController =
+      TextEditingController(text: "1");
+  int currentPage = 1;
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : SizedBox(
+            height: MediaQuery.sizeOf(context).height,
             child: path != null
                 ? PDFView(
+                    onRender: (pages) => {},
+                    onViewCreated: (controller) {
+                      widget.setController(
+                          controller, pageNumberTextEditingController);
+                    },
+                    onPageChanged: (page, total) {
+                      pageNumberTextEditingController.text =
+                          (page! + 1).toString();
+                      setState(() {});
+                    },
                     filePath: path!,
                     autoSpacing: true,
                     pageFling: true,
+                    swipeHorizontal: false,
                   )
                 : const Text('Failed to load PDF'),
           );
