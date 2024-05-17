@@ -85,10 +85,17 @@ class SignUpPage extends StatelessWidget {
                               context: context)
                           .then((value) {
                         log(value.toString());
-                        if (value) {
+                        if (value['isSign']) {
+                          log("hlwww-----  " + value['token']);
+                          Apiservices.sendOtp(
+                            context,
+                            value['token'],
+                          );
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const OTPPage(),
+                              builder: (context) => OTPPage(
+                                token: value['token'],
+                              ),
                             ),
                           );
                         }

@@ -47,13 +47,14 @@ class Apiservices {
 
 //---------------------------------------------------------------------------------------------------------
 //signup-user
-  static Future<bool> signupUser({
+  static Future<Map<String, dynamic>> signupUser({
     required String name,
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     bool isSign = false;
+    String? token;
 
     try {
       Response res = await ApiBaseServices.postRequest(
@@ -65,11 +66,12 @@ class Apiservices {
         },
       );
 
-      log("Response Data: ${res.data}");
+      log("Response Data: ${res.data['token']}");
       log(res.statusCode.toString());
 
       if (res.statusCode == 200) {
         isSign = true;
+        token = res.data['token'];
       }
     } catch (e) {
       if (e is DioException) {
@@ -84,7 +86,11 @@ class Apiservices {
 
       isSign = false;
     }
-    return isSign;
+
+    return {
+      'isSign': isSign,
+      'token': token,
+    };
   }
 
   static Future<Response> fetchUserData() async {
@@ -93,10 +99,58 @@ class Apiservices {
     );
     return res;
   }
+
   static Future<Response> fetchNotes() async {
     Response res = await ApiBaseServices.getRequestWithHeaders(
       endPoint: "/note",
     );
     return res;
+  }
+
+  static Future<bool> sendOtp(BuildContext context, String token) async {
+    bool isSend = false;
+    try {
+      final res = await ApiBaseServices.getRequestWithHeaderFromFun(
+          gettoken: token, endPoint: "/user/sendotp");
+      if (res.statusCode == 200) {
+        isSend = true;
+      }
+    } catch (e) {
+      isSend = false;
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+    return isSend;
+  }
+
+  static Future<bool> verifyOtp(
+      BuildContext context, String otp, String token) async {
+    bool isverify = false;
+    try {
+      final res = await ApiBaseServices.postRequestWithHeaderFromFun(
+          endPoint: "/user/verifyotp", gettoken: token, body: {"otp": otp});
+      if (res.statusCode == 200) {
+        isverify = true;
+      }
+    } catch (e) {
+      isverify = false;
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+    return isverify;
   }
 }
