@@ -107,7 +107,7 @@ class _PreviewNoteScreenState extends State<PreviewNoteScreen> {
             setController: setControllers,
             title: widget.note.title,
             description: widget.note.description,
-            pdfUrl: widget.note.pdfUrl,
+            pdfUrl: widget.note.fileUrl,
           ),
         ),
       ),

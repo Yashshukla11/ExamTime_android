@@ -1,11 +1,12 @@
 import 'package:examtime/screens/discussion/discussion.dart';
 
 import 'dart:developer';
-
+import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/screens/request_notes/request.dart';
 import 'package:examtime/services/notification_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart';
 import 'package:examtime/screens/liked_notes/liked.dart';
@@ -15,7 +16,6 @@ import 'package:examtime/screens/auth_screen/signup.dart';
 import 'package:examtime/screens/profile/profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:examtime/screens/auth_screen/otp.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -27,7 +27,9 @@ void main() async {
 }
 
 Future<void> backgroundHandler() async {
-  print("Handling a background message: ");
+  if (kDebugMode) {
+    print("Handling a background message: ");
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -44,16 +46,16 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoadingScreen(),
-        DashboardPage.routeName: (context) => DashboardPage(),
+        DashboardPage.routeName: (context) => const DashboardPage(),
         LoginPage.routeName: (context) => LoginPage(),
-        SignUpPage.routeName: (context) => SignUpPage(),
+        SignUpPage.routeName: (context) => const SignUpPage(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
         LikedNotesPage.routeName: (context) => LikedNotesPage(),
         RequestNotesPage.routeName: (context) => RequestNotesPage(),
+         OTPPage.routeName:(context)=>OTPPage(),
         DiscussionPage.routeName: (context) => DiscussionPage(),
 
-        //OTPPage.routeName: (context) => OTPPage(),
- main
+
       },
     );
   }
