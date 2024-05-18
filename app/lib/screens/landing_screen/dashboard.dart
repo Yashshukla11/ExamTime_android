@@ -537,7 +537,6 @@ import 'dart:io';
 // }
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:examtime/model/notes.dart';
 import 'package:examtime/screens/landing_screen/popupdetail.dart';
 import 'package:examtime/screens/note_preview/preview_note_screen.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';

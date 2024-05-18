@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = 'John Doe';
   String _email = 'john.doe@example.com';
   bool isEmail = true;
-   User ?  user;
+  User ?  user;
 
   void _editProfile() {
     showDialog(
@@ -71,8 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void fetchUserDetails()async{
     if(SharedServices.isLoggedIn()){
       Response res=await Apiservices.fetchUserData();
-       user=User.fromJson(jsonDecode(jsonEncode(res.data)));
-       setState(() {});
+      user=User.fromJson(jsonDecode(jsonEncode(res.data)));
+      setState(() {});
       //print(user.username);
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Stack(
                   children: [
-                     CircleAvatar(
+                    CircleAvatar(
                       radius: 100,
                       backgroundColor: Colors.yellow,
                       child: CircleAvatar(
