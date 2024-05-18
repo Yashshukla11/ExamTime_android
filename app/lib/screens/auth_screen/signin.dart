@@ -2,11 +2,7 @@ import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'signup.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart'; // Import the DashboardPage here
-
-void main() {
-  runApp(const MyApp());
-}
+import 'package:examtime/screens/landing_screen/dashboard.dart'; 
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
@@ -71,28 +67,42 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Apiservices.loginUser(
-                              email: email.text,
-                              password: password.text,
-                              context: context)
-                          .then((value) {
-                        if (value) {
-                          Navigator.pushReplacementNamed(
-                              context, DashboardPage.routeName);
+                      onPressed: () {
+                        if(email.text.isNotEmpty && password.text.isNotEmpty){
+                          Apiservices.loginUser(
+                            email: email.text,
+                            password: password.text,
+                            context: context
+                          ).then((value) {
+                            if (value) {
+                              Navigator.pushReplacementNamed(
+                                context, 
+                                DashboardPage.routeName
+                              );
+                            } else {
+                              Alert_option(context,"Invalid login");
+                            }
+                          });
                         }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryColor,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Theme.of(context).primaryColor),
+                        else{
+                            Alert_option(context,"Credentials should not be empty");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
                       ),
+                      child: const Text('Login'),
                     ),
-                    child: const Text('Login'),
-                  ),
+
+
+
+
+ 
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
@@ -112,5 +122,25 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<dynamic> Alert_option(BuildContext context,String value) {
+    return showDialog(
+     context: context,
+     builder: (BuildContext context) {
+       return AlertDialog(
+        //  title: const Text("Login failed"),
+         content: Text(value),
+         actions: <Widget>[
+           TextButton(
+             onPressed: () {
+               Navigator.of(context).pop();
+             },
+             child: const Text("OK"),
+           ),
+         ],
+       );
+     }
+   );
   }
 }

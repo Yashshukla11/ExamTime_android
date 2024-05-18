@@ -77,7 +77,42 @@ class SignUpPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () { 
+                      if(name.text.isNotEmpty && email.text.isNotEmpty && password.text.isNotEmpty){
+                        Apiservices.signupUser(
+                                name: name.text,
+                                email: email.text,
+                                password: password.text,
+                                context: context)
+                            .then((value) {
+                          log(value.toString());
+                          if (value) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const OTPPage(),
+                              ),
+                            );
+                          }
+                        });
+                      }
+                      else{
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                  title: const Text("Credentials should not be empty"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
+                      }
                       Apiservices.signupUser(
                               name: name.text,
                               email: email.text,
@@ -116,11 +151,12 @@ class SignUpPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
+                          
                           builder: (context) => LoginPage(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Already have an account? Sign in',
                       style: TextStyle(color: Colors.white),
                     ),
