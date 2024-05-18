@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         DiscussionPage.routeName: (context) => DiscussionPage(),
 
         //OTPPage.routeName: (context) => OTPPage(),
- main
+
       },
     );
   }
