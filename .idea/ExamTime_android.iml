@@ -10,6 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="fc0d5eda-517c-48c1-ac27-4ca9f7d43479" />

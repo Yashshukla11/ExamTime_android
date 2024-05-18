@@ -49,7 +49,7 @@ class OTPPage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()));
+                                  builder: (context) =>  LoginPage()));
                         }
                       });
                     },
@@ -61,7 +61,7 @@ class OTPPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Verify'),
+                    child: const Text('Verify'),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
