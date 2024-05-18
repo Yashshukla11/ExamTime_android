@@ -1,12 +1,14 @@
 import 'dart:developer';
+
+import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'otp.dart';
 import 'signin.dart'; // Import your sign-in page here
 
 class SignUpPage extends StatefulWidget {
   static const String routeName = '/signup';
+
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
@@ -17,7 +19,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -42,31 +43,31 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: 200,
                     height: 150,
                   ),
-                  Form(
-                    key: _formKey1,
-                    child: TextFormField(
-                      controller: email,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Enter your email',
-                        prefixIcon: Icon(Icons.email),
-                      ),
-
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        }
-                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                        if (!emailRegex.hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
+                Form(
+                  key: _formKey1,
+                  child: TextFormField(
+                    controller: email,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Enter your email',
+                      prefixIcon: Icon(Icons.email),
                     ),
+
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an email';
+                      }
+                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
+                ),
                   const SizedBox(height: 10.0),
                   TextField(
                     controller: name,
@@ -102,45 +103,91 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  Form(
-                    key: _formKey3,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: TextFormField(
-                      validator: (value) {
-                        if(value!=password.text){
-                          return 'password should be match';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Confirm Password',
-                        prefixIcon: Icon(Icons.lock),
-                      ),
+                 Form(
+                  key: _formKey3,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: TextFormField(
+                    validator: (value) {
+                      if(value!=password.text){
+                        return 'password should be match';
+                      }
+                      return null;
+                    },
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Confirm Password',
+                      prefixIcon: Icon(Icons.lock),
                     ),
                   ),
+                ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
                       if(_formKey1.currentState!.validate() && _formKey2.currentState!.validate() && _formKey3.currentState!.validate()){
                         Apiservices.signupUser(
-                            name: name.text,
-                            email: email.text,
-                            password: password.text,
-                            context: context)
+                                name: name.text,
+                                email: email.text,
+                                password: password.text,
+                                context: context)
                             .then((value) {
                           log(value.toString());
-                          if (value) {
+                          if (value['isSign']) {
+                            log("hlwww-----  " + value['token']);
+                            Apiservices.sendOtp(
+                              context,
+                              value['token'],
+                            );
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => OTPPage(),
+                                builder: (context) => OTPPage(
+                                  token: value['token'],
                               ),
-                            );
+                            ));
                           }
                         });
                       }
+                      else{
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                  title: const Text("Credentials should not be empty"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
+                      }
+                      Apiservices.signupUser(
+                              name: name.text,
+                              email: email.text,
+                              password: password.text,
+                              context: context)
+                          .then((value) {
+                        log(value.toString());
+                        if (value['isSign']) {
+                          log("hlwww-----  " + value['token']);
+                          Apiservices.sendOtp(
+                            context,
+                            value['token'],
+                          );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => OTPPage(
+                                token: value['token'],
+                              ),
+                            ),
+                          );
+                        }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
@@ -157,11 +204,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
+
                           builder: (context) => LoginPage(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Already have an account? Sign in',
                       style: TextStyle(color: Colors.white),
                     ),

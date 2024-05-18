@@ -18,13 +18,14 @@ import 'package:flutter/material.dart';
 
 class SharedServices {
 //set all the login details-----------------------------------
-  static const  String LIKED_NOTES='likedNotes';
+  static const String LIKED_NOTES = 'likedNotes';
   static Future<void> setLoginDetails(UserModel? usermodel) async {
     if (usermodel != null) {
       preferences!.setString("login_details", jsonEncode(usermodel.toJson()));
     }
   }
-  static  void setToken(String token){
+
+  static void setToken(String token) {
     preferences?.setString("token", token);
   }
 
@@ -48,21 +49,22 @@ class SharedServices {
     return true;
   }
 
-  static removeLikedNotes(BuildContext context,String fileUrl){
-    List<String>?list=preferences?.getStringList(LIKED_NOTES);
-    if(list!=null){
+  static removeLikedNotes(BuildContext context, String fileUrl) {
+    List<String>? list = preferences?.getStringList(LIKED_NOTES);
+    if (list != null) {
       list.remove(fileUrl);
-      preferences?.setStringList(LIKED_NOTES,list);
+      preferences?.setStringList(LIKED_NOTES, list);
     }
   }
-  static addLikedNotes(BuildContext context,String fileUrl){
-     List<String>?list=preferences?.getStringList(LIKED_NOTES);
-     if(list==null){
-       List<String>temp=[fileUrl];
-       preferences?.setStringList(LIKED_NOTES,temp);
-     }else{
-       list.add(fileUrl);
-       preferences?.setStringList(LIKED_NOTES,list);
-     }
+
+  static addLikedNotes(BuildContext context, String fileUrl) {
+    List<String>? list = preferences?.getStringList(LIKED_NOTES);
+    if (list == null) {
+      List<String> temp = [fileUrl];
+      preferences?.setStringList(LIKED_NOTES, temp);
+    } else {
+      list.add(fileUrl);
+      preferences?.setStringList(LIKED_NOTES, list);
+    }
   }
 }
