@@ -1,3 +1,5 @@
+import 'package:examtime/screens/discussion/discussion.dart';
+
 import 'dart:developer';
 import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/SharedServices/Preferences.dart';
@@ -15,14 +17,15 @@ import 'package:examtime/screens/profile/profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
- final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotificationService().init();
   preferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
+
 Future<void> backgroundHandler() async {
   if (kDebugMode) {
     print("Handling a background message: ");
@@ -35,8 +38,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ExamTime',
       debugShowCheckedModeBanner: false,
+      title: 'ExamTime',
       theme: ThemeData(
         primaryColor: const Color(0xFF1F2937),
       ),
@@ -50,13 +53,15 @@ class MyApp extends StatelessWidget {
         LikedNotesPage.routeName: (context) => LikedNotesPage(),
         RequestNotesPage.routeName: (context) => RequestNotesPage(),
          OTPPage.routeName:(context)=>OTPPage(),
+        DiscussionPage.routeName: (context) => DiscussionPage(),
+
+
       },
     );
   }
 }
 
 class LoadingScreen extends StatefulWidget {
-
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override

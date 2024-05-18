@@ -47,12 +47,12 @@ class ApiBaseServices {
     required String endPoint,
   }) async {
     Map<String, String> newHeaders = {};
-    Map<String, String> contentType = { 'Content-Type': 'application/json' };
+    Map<String, String> contentType = {'Content-Type': 'application/json'};
     newHeaders.addAll(contentType);
     if (SharedServices.isLoggedIn()) {
       UserModel? model = SharedServices.getLoginDetails();
       String token = model!.token.toString();
-      newHeaders.addAll( {'Authorization': 'Bearer $token'});
+      newHeaders.addAll({'Authorization': 'Bearer $token'});
     }
     log("newheaders: $newHeaders");
     final response = await dio.get(
@@ -144,6 +144,39 @@ class ApiBaseServices {
     final response = await dio.delete(
       url(extendedURL: endPoint),
       // headers: _getHeaders(),
+    );
+    return response;
+  }
+
+  //get header from function
+  static Future<Response> postRequestWithHeaderFromFun({
+    required String endPoint,
+    required String gettoken,
+    required Object body,
+  }) async {
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $gettoken',
+    };
+    final response = await dio.post(
+      url(extendedURL: endPoint),
+      data: jsonEncode(body),
+    );
+    return response;
+  }
+
+  //get header from function
+  static Future<Response> getRequestWithHeaderFromFun({
+    required String endPoint,
+    required String gettoken,
+    //   required Object body,
+  }) async {
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $gettoken',
+    };
+    final response = await dio.get(
+      url(extendedURL: endPoint),
     );
     return response;
   }
