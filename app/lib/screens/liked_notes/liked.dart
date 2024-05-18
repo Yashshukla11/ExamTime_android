@@ -16,9 +16,9 @@ class LikedNotesPage extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        appBar: const CommonNavBar(),
+        appBar: CommonNavBar(),
         drawer: AppDrawer(), // Use the CommonNavBar for the app bar
-        body: const Center(
+        body: Center(
           child: Text(
             'Liked Notes Page',
             style: TextStyle(fontSize: 20),
