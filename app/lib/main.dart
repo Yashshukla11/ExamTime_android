@@ -1,3 +1,5 @@
+import 'package:examtime/screens/discussion/discussion.dart';
+
 import 'dart:developer';
 
 import 'package:examtime/services/SharedServices/Preferences.dart';
@@ -48,7 +50,10 @@ class MyApp extends StatelessWidget {
         ProfileScreen.routeName: (context) => ProfileScreen(),
         LikedNotesPage.routeName: (context) => LikedNotesPage(),
         RequestNotesPage.routeName: (context) => RequestNotesPage(),
+        DiscussionPage.routeName: (context) => DiscussionPage(),
+
         //OTPPage.routeName: (context) => OTPPage(),
+ main
       },
     );
   }
