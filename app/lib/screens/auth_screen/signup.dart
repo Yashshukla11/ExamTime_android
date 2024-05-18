@@ -77,8 +77,7 @@ class SignUpPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
-                    onPressed: () {
- 
+                    onPressed: () { 
                       if(name.text.isNotEmpty && email.text.isNotEmpty && password.text.isNotEmpty){
                         Apiservices.signupUser(
                                 name: name.text,
@@ -114,8 +113,28 @@ class SignUpPage extends StatelessWidget {
                               }
                             );
                       }
-
-                     
+                      Apiservices.signupUser(
+                              name: name.text,
+                              email: email.text,
+                              password: password.text,
+                              context: context)
+                          .then((value) {
+                        log(value.toString());
+                        if (value['isSign']) {
+                          log("hlwww-----  " + value['token']);
+                          Apiservices.sendOtp(
+                            context,
+                            value['token'],
+                          );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => OTPPage(
+                                token: value['token'],
+                              ),
+                            ),
+                          );
+                        }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
