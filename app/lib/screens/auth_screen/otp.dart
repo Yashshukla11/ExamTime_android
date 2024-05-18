@@ -1,10 +1,14 @@
+
+import 'package:dio/dio.dart';
+import 'package:examtime/screens/landing_screen/dashboard.dart';
+import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class OTPPage extends StatelessWidget {
+   OTPPage({super.key});
   static const String routeName = '/otp';
-
-  const OTPPage({Key? key});
+  TextEditingController otpController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,8 @@ class OTPPage extends StatelessWidget {
                     height: 150,
                   ),
                   TextField(
+                    keyboardType: TextInputType.number,
+                    controller:otpController,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -36,8 +42,14 @@ class OTPPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-
+                    onPressed: () async {
+                      bool verify=await Apiservices.verifyOtp(int.tryParse(otpController.text)??000);
+                      if(verify && context.mounted){
+                        Navigator.pushReplacementNamed(
+                            context, DashboardPage.routeName);
+                      }else if(context.mounted){
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Otp verification failed , try again")));
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
@@ -47,12 +59,12 @@ class OTPPage extends StatelessWidget {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    child: Text('Verify'),
+                    child: const Text('Verify'),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-
+                      Apiservices.sendOtp();
                     },
                     child: const Text(
                       'Didn\'t get an OTP? Resend it',

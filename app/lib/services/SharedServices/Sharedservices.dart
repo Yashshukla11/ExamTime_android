@@ -24,6 +24,9 @@ class SharedServices {
       preferences!.setString("login_details", jsonEncode(usermodel.toJson()));
     }
   }
+  static  void setToken(String token){
+    preferences?.setString("token", token);
+  }
 
 // get the login details------------------------------------
   static UserModel? getLoginDetails() {

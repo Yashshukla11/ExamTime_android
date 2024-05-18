@@ -47,9 +47,9 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (context) => LoginPage(),
         SignUpPage.routeName: (context) => const SignUpPage(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
-        LikedNotesPage.routeName: (context) => LikedNotesPage(),
-        RequestNotesPage.routeName: (context) => RequestNotesPage(),
-         OTPPage.routeName:(context)=>OTPPage(),
+        LikedNotesPage.routeName: (context) => const LikedNotesPage(),
+        RequestNotesPage.routeName: (context) => const RequestNotesPage(),
+         OTPPage.routeName:(context)=> OTPPage(),
       },
     );
   }

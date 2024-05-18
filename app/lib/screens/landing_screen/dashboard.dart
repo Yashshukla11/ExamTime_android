@@ -42,11 +42,12 @@ class _DashboardPageState extends State<DashboardPage> {
   List<String>likedNotes=[];
   List<String> likedStatus =[];
 
-  fetchNotes() async {
-    if (SharedServices.isLoggedIn()) {
+  fetchNotes()  async {
+    if (SharedServices.isLoggedIn()){
       Response res = await Apiservices.fetchNotes();
       notes = jsonDecode(jsonEncode(res.data));
       isLoading = false;
+      setState(() {});
        if (kDebugMode) {
        print(notes);
       }
@@ -58,12 +59,14 @@ class _DashboardPageState extends State<DashboardPage> {
   getLikedNotes(){
     likedNotes=(preferences?.getStringList(SharedServices.LIKED_NOTES))??likedNotes;
     likedStatus=likedNotes;
+
   }
   @override
   void initState() {
     super.initState();
-    fetchNotes();
     getLikedNotes();
+    fetchNotes();
+
 
   }
 

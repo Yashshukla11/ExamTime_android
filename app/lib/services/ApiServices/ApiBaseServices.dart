@@ -88,8 +88,8 @@ class ApiBaseServices {
     required Object body,
   }) async {
     Map<String, String> newHeaders = {};
-    Map<String, String> conentType = {'Content-Type': 'application/json'};
-    newHeaders.addAll(conentType);
+    Map<String, String> contentType = {'Content-Type': 'application/json'};
+    newHeaders.addAll(contentType);
     if (SharedServices.isLoggedIn()) {
       UserModel? model = SharedServices.getLoginDetails();
       String token = model!.token.toString();

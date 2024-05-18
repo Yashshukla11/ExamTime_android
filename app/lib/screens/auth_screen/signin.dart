@@ -1,7 +1,9 @@
+import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/widgets.dart';
 import 'signup.dart';
 import 'package:examtime/screens/landing_screen/dashboard.dart'; // Import the DashboardPage here
 
@@ -71,7 +73,6 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'Enter your email',
                         prefixIcon: Icon(Icons.email),
                       ),
-
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -97,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: (){
                           showPassword=!showPassword;
                           setState(() {
-
                           });
                         },
                         icon:  Icon(showPassword?CupertinoIcons.eye_fill:CupertinoIcons.eye_slash_fill)),
@@ -105,30 +105,50 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if(_formKey1.currentState!.validate()){
-                        Apiservices.loginUser(
-                            email: email.text,
-                            password: password.text,
-                            context: context)
-                            .then((value) {
-                          if (value) {
-                            Navigator.pushReplacementNamed(
-                                context, DashboardPage.routeName);
-                          }
-                        });
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryColor,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Theme.of(context).primaryColor),
-                      ),
+                  Container(
+                    margin: EdgeInsets.only(left: MediaQuery.sizeOf(context).width*0.3),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if(_formKey1.currentState!.validate()){
+                              Apiservices.loginUser(
+                                  email: email.text,
+                                  password: password.text,
+                                  context: context)
+                                  .then((value) {
+                                if (value) {
+                                  Navigator.pushReplacementNamed(
+                                      context, DashboardPage.routeName);
+                                }
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                          child: const Text('Login'),
+                        ),
+                        SizedBox(width: MediaQuery.sizeOf(context).width*0.2,),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, OTPPage.routeName);
+                          },
+                          child: const Text(
+                            'verify otp',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: const Text('Login'),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(

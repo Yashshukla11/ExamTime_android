@@ -135,7 +135,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (value) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const OTPPage(),
+                                builder: (context) => OTPPage(),
                               ),
                             );
                           }
