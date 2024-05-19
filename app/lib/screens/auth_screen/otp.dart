@@ -7,7 +7,7 @@ class OTPPage extends StatelessWidget {
   final String token;
   static const String routeName = '/otp';
 
-  const OTPPage({Key? key, required this.token});
+  const OTPPage({Key? key, required this.token}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,44 +31,76 @@ class OTPPage extends StatelessWidget {
                     width: 200,
                     height: 150,
                   ),
-                  TextField(
-                    controller: otpC,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter Otp',
-                      prefixIcon: Icon(Icons.password),
+                  Card(
+                    color: Colors.grey[300],
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Apiservices.verifyOtp(context, otpC.text, token)
-                          .then((value) {
-                        if (value) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  LoginPage()));
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryColor,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Theme.of(context).primaryColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: otpC,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Enter OTP',
+                              prefixIcon: Icon(
+                                Icons.password,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              Apiservices.verifyOtp(context, otpC.text, token)
+                                  .then((value) {
+                                if (value) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Verify',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          const SizedBox(height: 13),
+                          GestureDetector(
+                            onTap: () {
+                              // Add resend OTP functionality here
+                            },
+                            child: const Text(
+                              'Didn\'t get an OTP? Resend it.',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    child: const Text('Verify'),
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {},
-                    child: const Text(
-                      'Didn\'t get an OTP? Resend it',
-                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
