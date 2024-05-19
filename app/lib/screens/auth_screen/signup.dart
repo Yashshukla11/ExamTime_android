@@ -1,9 +1,10 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'signin.dart'; // Import your sign-in page here
 
 class SignUpPage extends StatefulWidget {
@@ -22,6 +23,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+      bool confirm_password_obscure = true;
+          bool password_osbscure = true;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,12 +89,22 @@ class _SignUpPageState extends State<SignUpPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: TextFormField(
                       controller: password,
-                      obscureText: true,  // Set to true for password fields
-                      decoration: const InputDecoration(
+                      obscureText: password_osbscure,  // Set to true for password fields
+                      decoration:  InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Enter your password',
                         prefixIcon: Icon(Icons.lock),
+                               suffixIcon: IconButton(
+          icon: Icon(
+            password_osbscure ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              password_osbscure = !password_osbscure;
+            });
+          },
+        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -100,6 +115,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+             
+         
+
+
                     ),
                   ),
                   const SizedBox(height: 10.0),
@@ -113,12 +132,22 @@ class _SignUpPageState extends State<SignUpPage> {
                       }
                       return null;
                     },
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: confirm_password_obscure,
+                    decoration:  InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       hintText: 'Confirm Password',
                       prefixIcon: Icon(Icons.lock),
+                                              suffixIcon: IconButton(
+          icon: Icon(
+            confirm_password_obscure ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              confirm_password_obscure = !confirm_password_obscure;
+            });
+          },
+        ),
                     ),
                   ),
                 ),
