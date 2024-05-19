@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                       child: const Text(
                                         'Verify OTP?',
                                         style: TextStyle(
-                                          color: Colors.blue,
+                                          color: Color.fromARGB(255, 0, 140, 255),
                                           // fontStyle: FontStyle.italic,
                                           fontSize: 16,
                                         ),
