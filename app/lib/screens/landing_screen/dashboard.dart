@@ -134,7 +134,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width*0.4,
+                          width: MediaQuery.sizeOf(context).width*0.3,
                           child: Text(
                             notes[index]["title"],
                             overflow: TextOverflow.ellipsis,
