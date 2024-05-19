@@ -53,15 +53,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoadingScreen(),
-        DashboardPage.routeName: (context) => DashboardPage(),
+        DashboardPage.routeName: (context) => const DashboardPage(),
         LoginPage.routeName: (context) => LoginPage(),
-        SignUpPage.routeName: (context) => SignUpPage(),
+        SignUpPage.routeName: (context) => const SignUpPage(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
-        LikedNotesPage.routeName: (context) => LikedNotesPage(),
-        RequestNotesPage.routeName: (context) => RequestNotesPage(),
+        LikedNotesPage.routeName: (context) => const LikedNotesPage(),
+        RequestNotesPage.routeName: (context) => const RequestNotesPage(),
         DiscussionPage.routeName: (context) => DiscussionPage(),
-
-        //OTPPage.routeName: (context) => OTPPage(),
+        OTPPage.routeName: (context) =>  const OTPPage(token: '',),
 
       },
     );

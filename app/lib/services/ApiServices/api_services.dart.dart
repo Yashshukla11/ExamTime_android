@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:examtime/common_widget/dio_error.dart';
 import 'package:examtime/model/user.dart';
 import 'package:examtime/services/ApiServices/ApiBaseServices.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class Apiservices {
       if (response.statusCode == 201 || response.statusCode == 200) {
         node = userModelFromJson(jsonEncode(response.data));
         SharedServices.setLoginDetails(node);
-
         res = true;
       }
       return res;
@@ -68,7 +68,7 @@ class Apiservices {
 
       log("Response Data: ${res.data['token']}");
       log(res.statusCode.toString());
-
+      preferences?.setString("token",jsonDecode(res.data)['token']);
       if (res.statusCode == 200) {
         isSign = true;
         token = res.data['token'];
