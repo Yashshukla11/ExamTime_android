@@ -22,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,175 +44,205 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: 200,
                     height: 150,
                   ),
-                Form(
-                  key: _formKey1,
-                  child: TextFormField(
-                    controller: email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter your email',
-                      prefixIcon: Icon(Icons.email),
+                  Card(
+                    color: Colors.grey[300],
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter an email';
-                      }
-                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                      if (!emailRegex.hasMatch(value)) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                  const SizedBox(height: 10.0),
-                  TextField(
-                    controller: name,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Username',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Form(
-                    key: _formKey2,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: TextFormField(
-                      controller: password,
-                      obscureText: true,  // Set to true for password fields
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Enter your password',
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                 Form(
-                  key: _formKey3,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: TextFormField(
-                    validator: (value) {
-                      if(value!=password.text){
-                        return 'password should be match';
-                      }
-                      return null;
-                    },
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Confirm Password',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                  ),
-                ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      if(_formKey1.currentState!.validate() && _formKey2.currentState!.validate() && _formKey3.currentState!.validate()){
-                        Apiservices.signupUser(
-                                name: name.text,
-                                email: email.text,
-                                password: password.text,
-                                context: context)
-                            .then((value) {
-                          log(value.toString());
-                          if (value['isSign']) {
-                            log("hlwww-----  " + value['token']);
-                            Apiservices.sendOtp(
-                              context,
-                              value['token'],
-                            );
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => OTPPage(
-                                  token: value['token'],
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          Form(
+                            key: _formKey1,
+                            child: TextFormField(
+                              controller: email,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.grey[200],
+                                hintText: 'Enter your email',
+                                prefixIcon: Icon(Icons.email,
+                                    color: Theme.of(context).primaryColor),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
-                            ));
-                          }
-                        });
-                      }
-                      else{
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                                  title: const Text("Credentials should not be empty"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("OK"),
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                      }
-                      Apiservices.signupUser(
-                              name: name.text,
-                              email: email.text,
-                              password: password.text,
-                              context: context)
-                          .then((value) {
-                        log(value.toString());
-                        if (value['isSign']) {
-                          log("hlwww-----  " + value['token']);
-                          Apiservices.sendOtp(
-                            context,
-                            value['token'],
-                          );
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => OTPPage(
-                                token: value['token'],
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter an email';
+                                }
+                                final emailRegex =
+                                    RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                                if (!emailRegex.hasMatch(value)) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10.0),
+                          TextFormField(
+                            controller: name,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Username',
+                              prefixIcon: Icon(Icons.person,
+                                  color: Theme.of(context).primaryColor),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
                               ),
                             ),
-                          );
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryColor,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Theme.of(context).primaryColor),
+                          ),
+                          const SizedBox(height: 10.0),
+                          Form(
+                            key: _formKey2,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: TextFormField(
+                              controller: password,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.grey[200],
+                                hintText: 'Enter your password',
+                                prefixIcon: Icon(Icons.lock,
+                                    color: Theme.of(context).primaryColor),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a password';
+                                }
+                                if (value.length < 6) {
+                                  return 'Password must be at least 6 characters long';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10.0),
+                          Form(
+                            key: _formKey3,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value != password.text) {
+                                  return 'Passwords do not match';
+                                }
+                                return null;
+                              },
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.grey[200],
+                                hintText: 'Confirm Password',
+                                prefixIcon: Icon(Icons.lock,
+                                    color: Theme.of(context).primaryColor),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey1.currentState!.validate() &&
+                                  _formKey2.currentState!.validate() &&
+                                  _formKey3.currentState!.validate()) {
+                                Apiservices.signupUser(
+                                  name: name.text,
+                                  email: email.text,
+                                  password: password.text,
+                                  context: context,
+                                ).then((value) {
+                                  log(value.toString());
+                                  if (value['isSign']) {
+                                    log("hlwww-----  " + value['token']);
+                                    Apiservices.sendOtp(
+                                        context, value['token']);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => OTPPage(
+                                          token: value['token'],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                });
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          "Credentials should not be empty!"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Sign Up',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          const SizedBox(height: 10.0),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                            child: const Text.rich(
+                              TextSpan(
+                                text: 'Already have an account?  ',
+                                style: TextStyle(color: Colors.black87),
+                                children: [
+                                  TextSpan(
+                                    text: ' Sign in',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    child: const Text('Sign Up'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Already have an account? Sign in',
-                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
