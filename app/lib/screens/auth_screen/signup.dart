@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'signin.dart'; // Import your sign-in page here
@@ -135,6 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           log(value.toString());
                           if (value['isSign']) {
                             log("hlwww-----  " + value['token']);
+                            preferences?.setString("token",value['token']);
                             Apiservices.sendOtp(
                               context,
                               value['token'],

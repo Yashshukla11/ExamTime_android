@@ -23,7 +23,7 @@ class Apiservices {
         email: email,
         password: password,
       );
-      log("heloo");
+      log("hello");
       log(jsonEncode(response.data));
       if (response.statusCode == 201 || response.statusCode == 200) {
         node = userModelFromJson(jsonEncode(response.data));
@@ -114,6 +114,10 @@ class Apiservices {
           gettoken: token, endPoint: "/user/sendotp");
       if (res.statusCode == 200) {
         isSend = true;
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Otp sent successfully")));
+        });
       }
     } catch (e) {
       isSend = false;
