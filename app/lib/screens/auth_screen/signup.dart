@@ -1,20 +1,29 @@
 import 'dart:developer';
 
+import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'signin.dart'; // Import your sign-in page here
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   static const String routeName = '/signup';
 
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
-    TextEditingController name = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -34,15 +43,31 @@ class SignUpPage extends StatelessWidget {
                     width: 200,
                     height: 150,
                   ),
-                  TextField(
+                Form(
+                  key: _formKey1,
+                  child: TextFormField(
                     controller: email,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: 'Email',
-                      prefixIcon: Icon(Icons.mail),
+                      hintText: 'Enter your email',
+                      prefixIcon: Icon(Icons.email),
                     ),
+
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an email';
+                      }
+                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
+                ),
                   const SizedBox(height: 10.0),
                   TextField(
                     controller: name,
@@ -54,29 +79,93 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  TextField(
-                    controller: password,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                  Form(
+                    key: _formKey2,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: TextFormField(
+                      controller: password,
+                      obscureText: true,  // Set to true for password fields
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Enter your password',
+                        prefixIcon: Icon(Icons.lock),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  const TextField(
+                 Form(
+                  key: _formKey3,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: TextFormField(
+                    validator: (value) {
+                      if(value!=password.text){
+                        return 'password should be match';
+                      }
+                      return null;
+                    },
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       hintText: 'Confirm Password',
                       prefixIcon: Icon(Icons.lock),
                     ),
                   ),
+                ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
+                      if(_formKey1.currentState!.validate() && _formKey2.currentState!.validate() && _formKey3.currentState!.validate()){
+                        Apiservices.signupUser(
+                                name: name.text,
+                                email: email.text,
+                                password: password.text,
+                                context: context)
+                            .then((value) {
+                          log(value.toString());
+                          if (value['isSign']) {
+                            log("hlwww-----  " + value['token']);
+                            Apiservices.sendOtp(
+                              context,
+                              value['token'],
+                            );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => OTPPage(
+                                  token: value['token'],
+                              ),
+                            ));
+                          }
+                        });
+                      }
+                      else{
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                  title: const Text("Credentials should not be empty"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
+                      }
                       Apiservices.signupUser(
                               name: name.text,
                               email: email.text,
@@ -84,10 +173,17 @@ class SignUpPage extends StatelessWidget {
                               context: context)
                           .then((value) {
                         log(value.toString());
-                        if (value) {
+                        if (value['isSign']) {
+                          log("hlwww-----  " + value['token']);
+                          Apiservices.sendOtp(
+                            context,
+                            value['token'],
+                          );
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
+                              builder: (context) => OTPPage(
+                                token: value['token'],
+                              ),
                             ),
                           );
                         }
@@ -108,11 +204,12 @@ class SignUpPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
+
                           builder: (context) => LoginPage(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Already have an account? Sign in',
                       style: TextStyle(color: Colors.white),
                     ),

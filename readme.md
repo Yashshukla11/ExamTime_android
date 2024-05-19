@@ -79,6 +79,16 @@
 </br>
 </div>
 
+<div align='left'>
+
+# Demo Credentials
+
+Email - demo@mail.xyz
+<br>
+Password - Demodemo#1
+
+</div>
+
 # Screenshots
 
 <br>
