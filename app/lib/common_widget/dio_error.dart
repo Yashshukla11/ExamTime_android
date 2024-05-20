@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
 
 class DioErrorHandling {
   static String? handleDioError(DioException error) {
@@ -9,7 +10,10 @@ class DioErrorHandling {
       final res = error.response!;
       log("Error Response Data: ${res.data}");
       final responseData = res.data;
-
+      if (responseData is Map<String, dynamic> &&
+          responseData.containsKey('token')) {
+        preferences?.setString("token",responseData['token']);
+      }
       if (responseData is Map<String, dynamic> &&
           responseData.containsKey('message')) {
         final dynamic messageValue = responseData['message'];

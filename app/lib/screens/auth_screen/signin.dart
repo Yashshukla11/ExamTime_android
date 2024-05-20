@@ -1,5 +1,6 @@
 import 'package:examtime/screens/auth_screen/otp.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -136,11 +137,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: const Text('Login'),
                         ),
-                        SizedBox(width: MediaQuery.sizeOf(context).width*0.2,),
+                        SizedBox(width: MediaQuery.sizeOf(context).width*0.12,),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, OTPPage.routeName);
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OTPPage(
+                                  token:preferences?.getString("token")??''),));
                           },
                           child: const Text(
                             'verify otp',
