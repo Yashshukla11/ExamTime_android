@@ -68,10 +68,11 @@ class Apiservices {
 
       log("Response Data: ${res.data['token']}");
       log(res.statusCode.toString());
-      preferences?.setString("token",jsonDecode(res.data)['token']);
       if (res.statusCode == 200) {
         isSign = true;
         token = res.data['token'];
+      }else{
+        print(res.statusCode);
       }
     } catch (e) {
       if (e is DioException) {

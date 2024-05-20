@@ -150,46 +150,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           }
                         });
                       }
-                      else{
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                                  title: const Text("Credentials should not be empty"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("OK"),
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                      }
-                      Apiservices.signupUser(
-                              name: name.text,
-                              email: email.text,
-                              password: password.text,
-                              context: context)
-                          .then((value) {
-                        log(value.toString());
-                        if (value['isSign']) {
-                          log("hlwww-----  " + value['token']);
-                          Apiservices.sendOtp(
-                            context,
-                            value['token'],
-                          );
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => OTPPage(
-                                token: value['token'],
-                              ),
-                            ),
-                          );
-                        }
-                      });
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
