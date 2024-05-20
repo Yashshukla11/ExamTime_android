@@ -38,3 +38,5 @@ A
 app/lib/main.dart,9\9\99e14883a0b77ddb8107df3445f7313d9bd84cf3
 ]
 -app/lib/screens/landing_screen/dashboard.dart,5\d\5d839bd2da7da37e596569c1e30d5a97356bace9
+T
+$app/lib/common_widget/dio_error.dart,4\b\4bbb62a3f15715a20cd38ef059d61f709918d394
