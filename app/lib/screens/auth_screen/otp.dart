@@ -1,5 +1,6 @@
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -7,7 +8,7 @@ class OTPPage extends StatelessWidget {
   final String token;
   static const String routeName = '/otp';
 
-  const OTPPage({Key? key, required this.token});
+  const OTPPage({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,28 @@ class OTPPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if(token.isEmpty){
+                        Future.delayed(Duration.zero, () {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(
+                               SnackBar(
+                              content: const Text("No email found, add your email and password "),action: SnackBarAction(
+                                 textColor: Colors.black,
+                                 backgroundColor: Colors.white,
+                                 label:"Login page",
+                                 onPressed: () {
+                                Future.delayed(const Duration(milliseconds: 500),() => Navigator.pushNamed(context,LoginPage.routeName),);
+                              },),));
+                        });
+                      }else{
+                        print("token in otp page : $token");
+                        Apiservices.sendOtp(
+                          context,
+                          token,
+                        );
+                      }
+                    },
                     child: const Text(
                       'Didn\'t get an OTP? Resend it',
                       style: TextStyle(color: Colors.white),
