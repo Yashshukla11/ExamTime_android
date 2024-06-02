@@ -1,10 +1,9 @@
 import 'package:examtime/common_widget/custom_button.dart';
 import 'package:examtime/common_widget/emailWidget.dart';
+import 'package:examtime/screens/auth_screen/signin.dart';
+import 'package:examtime/screens/privacy%20policy/privacy_policy.dart';
+import 'package:examtime/screens/terms%20and%20condition/terms_condition.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/landing_screen/notification.dart';
 import 'package:examtime/screens/landing_screen/navbar.dart';
 import 'package:examtime/screens/landing_screen/drawer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,18 +27,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String newName = _name;
         String newEmail = _email;
         return AlertDialog(
-          title: Text('Edit Profile'),
+          title: const Text('Edit Profile'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 onChanged: (value) {
                   newName = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 onChanged: (value) {
                   newEmail = value;
                 },
@@ -55,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -67,19 +66,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context); // to get width and hight
     return Scaffold(
-      appBar: CommonNavBar(),
+      appBar: const CommonNavBar(),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Center(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Stack(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 100,
                       backgroundColor: Colors.yellow,
                       child: CircleAvatar(
@@ -95,38 +94,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: emailWidget(isEmail, context)),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   _name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   _email,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
                 ),
-                SizedBox(height: 16),
-                CustomButton("Edit Profile", FontAwesomeIcons.userPen,
-                    _editProfile, media.width, context),
-                CustomButton("Terms and Conditions",
-                    FontAwesomeIcons.fileInvoice, () {}, media.width, context),
+                const SizedBox(height: 16),
+                CustomButton("Edit Profile",
+                    FontAwesomeIcons.userPen,
+                    _editProfile,
+                    media.width, context),
+                CustomButton(
+                    "Terms and Conditions",
+                    FontAwesomeIcons.fileInvoice,
+                        () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const TermsAndConditionsPage()),
+                      );
+                    }, media.width,
+                    context),
                 CustomButton(
                   "Privacy Policy",
                   FontAwesomeIcons.shieldHalved,
-                  () {},
+                      () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
+                    );
+                  },
                   media.width,
                   context,
                 ),
                 CustomButton(
                   "LogOut",
                   FontAwesomeIcons.signOut,
-                  () {},
+                      () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                    );
+                  },
                   media.width,
                   context,
                 ),
