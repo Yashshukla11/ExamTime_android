@@ -20,7 +20,82 @@ final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 class DashboardPage extends StatelessWidget {
   static const String routeName = '/dashboard';
 
-  DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  final TextEditingController _searchController = TextEditingController();
+  late FocusNode focusNode;
+  bool isInFocus = false;
+  List<dynamic> notes = [];
+  List<dynamic> filteredNotes = [];
+  User? user;
+  bool isLoading = true;
+  List<String> likedNotes = [];
+  List<String> likedStatus = [];
+
+  fetchNotes() async {
+    if (SharedServices.isLoggedIn()) {
+      Response res = await Apiservices.fetchNotes();
+      notes = jsonDecode(jsonEncode(res.data));
+      filteredNotes = notes;
+      isLoading = false;
+      setState(() {});
+      if (kDebugMode) {
+        print(notes);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error occurred : please logout and login again ")));
+    }
+  }
+
+  getLikedNotes() {
+    likedNotes =
+        (preferences?.getStringList(SharedServices.LIKED_NOTES)) ?? likedNotes;
+    likedStatus = likedNotes;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLikedNotes();
+    fetchNotes();
+    focusNode = FocusNode();
+    focusNode.addListener(() {
+      setState(() {
+        isInFocus = focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _searchController.dispose();
+    focusNode.dispose();
+  }
+
+  void _filterNotes() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        filteredNotes = notes;
+      } else {
+        filteredNotes = notes.where((note) {
+          return note['title'].toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  void _unfocusSearchBar() {
+    focusNode.unfocus();
+  }
 
   @override
   Widget build(BuildContext context) {
