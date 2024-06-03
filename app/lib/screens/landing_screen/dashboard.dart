@@ -37,7 +37,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   late FocusNode focusNode;
   bool isInFocus = false;
   List<dynamic> notes = [];
