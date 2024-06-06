@@ -53,6 +53,7 @@ dependencies:
   intl: ^0.17.0
   share_plus: ^9.0.0
   shared_preferences: ^2.2.3
+  provider: ^6.1.2
 
 
 dev_dependencies:
