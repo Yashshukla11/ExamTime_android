@@ -19,7 +19,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../helpers/ThemeProvider.dart';
 import '../../model/user.dart';
 import '../../services/SharedServices/Sharedservices.dart';
 import 'navbar.dart';
@@ -109,13 +111,16 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return WillPopScope(
       onWillPop: () async {
         return false; // Disables the back button
       },
       child: Scaffold(
         appBar: const CommonNavBar(),
-        drawer: AppDrawer(), // Use the CommonNavBar as the app bar
+        drawer: const AppDrawer(), // Use the CommonNavBar as the app bar
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator(
@@ -136,7 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           focusNode: focusNode,
                           decoration: InputDecoration(
                             labelText: 'Search Notes ...',
-                            prefixIcon: Icon(Icons.search),
+                            prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -164,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 margin: const EdgeInsets.all(20),
                                 padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkMode ? Colors.grey[850] : Colors.white,
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(

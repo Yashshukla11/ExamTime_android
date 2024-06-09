@@ -1,7 +1,4 @@
 import 'package:examtime/screens/discussion/discussion.dart';
-
-import 'dart:developer';
-
 import 'package:examtime/services/SharedServices/Preferences.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/screens/request_notes/request.dart';
@@ -14,33 +11,114 @@ import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
 import 'package:examtime/screens/profile/profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:examtime/screens/auth_screen/otp.dart';
+import 'helpers/ThemeProvider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotificationService().init();
   preferences = await SharedPreferences.getInstance();
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(create: (context)=>ThemeProvider(),
+      child: const MyApp()
+      )
+  );
 }
 
 Future<void> backgroundHandler() async {
   print("Handling a background message: ");
 }
 
+final ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: const Color(0xFF1F2937),
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.black),
+    bodyMedium: TextStyle(color: Colors.black),
+    bodySmall: TextStyle(color: Colors.black),
+    displayLarge: TextStyle(color: Colors.black),
+    displayMedium: TextStyle(color: Colors.black),
+    displaySmall: TextStyle(color: Colors.black),
+    headlineMedium: TextStyle(color: Colors.black),
+    headlineSmall: TextStyle(color: Colors.black),
+    titleLarge: TextStyle(color: Colors.black),
+    titleMedium: TextStyle(color: Colors.black),
+    titleSmall: TextStyle(color: Colors.black),
+    labelLarge: TextStyle(color: Colors.black),
+    labelSmall: TextStyle(color: Colors.black),
+  ),
+  primaryTextTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.white),
+    bodyMedium: TextStyle(color: Colors.white),
+    bodySmall: TextStyle(color: Colors.white),
+    displayLarge: TextStyle(color: Colors.white),
+    displayMedium: TextStyle(color: Colors.white),
+    displaySmall: TextStyle(color: Colors.white),
+    headlineMedium: TextStyle(color: Colors.white),
+    headlineSmall: TextStyle(color: Colors.white),
+    titleLarge: TextStyle(color: Colors.white),
+    titleMedium: TextStyle(color: Colors.white),
+    titleSmall: TextStyle(color: Colors.white),
+    labelLarge: TextStyle(color: Colors.white),
+    labelSmall: TextStyle(color: Colors.white),
+  ),
+);
+
+final ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: const Color(0xFF1F2937),
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.white),
+    bodyMedium: TextStyle(color: Colors.white),
+    bodySmall: TextStyle(color: Colors.white),
+    displayLarge: TextStyle(color: Colors.white),
+    displayMedium: TextStyle(color: Colors.white),
+    displaySmall: TextStyle(color: Colors.white),
+    headlineMedium: TextStyle(color: Colors.white),
+    headlineSmall: TextStyle(color: Colors.white),
+    titleLarge: TextStyle(color: Colors.white),
+    titleMedium: TextStyle(color: Colors.white),
+    titleSmall: TextStyle(color: Colors.white),
+    labelLarge: TextStyle(color: Colors.white),
+    labelSmall: TextStyle(color: Colors.white),
+  ),
+  primaryTextTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.black),
+    bodyMedium: TextStyle(color: Colors.black),
+    bodySmall: TextStyle(color: Colors.black),
+    displayLarge: TextStyle(color: Colors.black),
+    displayMedium: TextStyle(color: Colors.black),
+    displaySmall: TextStyle(color: Colors.black),
+    headlineMedium: TextStyle(color: Colors.black),
+    headlineSmall: TextStyle(color: Colors.black),
+    titleLarge: TextStyle(color: Colors.black),
+    titleMedium: TextStyle(color: Colors.black),
+    titleSmall: TextStyle(color: Colors.black),
+    labelLarge: TextStyle(color: Colors.black),
+    labelSmall: TextStyle(color: Colors.black),
+  ),
+);
+
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ExamTime',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF1F2937),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: themeProvider.themeMode,
       initialRoute: '/',
       routes: {
         '/': (context) => const LoadingScreen(),
@@ -67,6 +145,7 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen>
     with SingleTickerProviderStateMixin {
+
   late AnimationController _animationController;
   late Animation<Color?> _backgroundColorAnimation;
 
@@ -114,8 +193,8 @@ class _LoadingScreenState extends State<LoadingScreen>
           children: [
             CachedNetworkImage(
               imageUrl: 'https://i.postimg.cc/02pnpHXG/logo-1.png',
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               width: 200,
               height: 200,
             ),
@@ -133,4 +212,5 @@ class _LoadingScreenState extends State<LoadingScreen>
       ),
     );
   }
+
 }
