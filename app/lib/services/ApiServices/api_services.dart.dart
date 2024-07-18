@@ -107,6 +107,12 @@ class Apiservices {
     );
     return res;
   }
+  static Future<Response> fetchRequests() async {
+    Response res = await ApiBaseServices.getRequestWithHeaders(
+      endPoint: "/request",
+    );
+    return res;
+  }
 
   static Future<bool> sendOtp(BuildContext context, String token) async {
     bool isSend = false;

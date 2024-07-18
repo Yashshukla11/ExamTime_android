@@ -11,9 +11,34 @@ class RequestNotesPage extends StatefulWidget {
   @override
   _RequestNotesPageState createState() => _RequestNotesPageState();
 }
+enum SubLabel {
+  DSA('DSA'),
+  COA('COA'),
+  C('C'),
+  Cpp('C++'),
+  Java('Java'),
+  DS('Distributed Systems'),
+  CN('Computer Networks'),
+  DBMS('DBMS'),
+  ML('Machine Learning'),
+  OS('Operating System');
+
+  final String label;
+  const SubLabel(this.label);
+}
+
+enum ModeLabel {
+  Printed('Printed'),
+  Handwritten('Handwritten');
+  final String label;
+  const ModeLabel(this.label);
+}
 
 class _RequestNotesPageState extends State<RequestNotesPage> {
   final TextEditingController _noteController = TextEditingController();
+  SubLabel? selectedSub = SubLabel.DSA;
+  ModeLabel? selectedMode = ModeLabel.Printed;
+
 
   @override
   void dispose() {
@@ -23,7 +48,10 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+
+
+
+  return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, DashboardPage.routeName);
         return false;
@@ -34,20 +62,109 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 20.0,),
+
+              Row(
+                children: [
+                  Icon(Icons.book, size: 30.0,),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Subject',
+                    style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F2937),
+
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              DropdownButtonFormField<SubLabel>(
+                value: selectedSub,
+                onChanged: (SubLabel? newValue) {
+                  setState(() {
+                    selectedSub = newValue;
+                  });
+                },
+                items: SubLabel.values.map((SubLabel subject) {
+                  return DropdownMenuItem<SubLabel>(
+                    value: subject,
+                    child: Text(subject.label
+                    ),
+                  );
+                }).toList(),
+                hint: const Text('Select Subject'),
+                isExpanded: true,
+                autofocus: true,
+                alignment: Alignment.centerLeft,
+                style:  TextStyle(
+                    color: Color(0xFF1F2937),
+
+                    fontSize: 17.0),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(Icons.description, size: 30.0,),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Type',
+                    style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F2937),
+
+                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              DropdownButtonFormField<ModeLabel>(
+                value: selectedMode,
+                onChanged: (ModeLabel? newValue) {
+                  setState(() {
+                    selectedMode = newValue;
+                  });
+                },
+
+                items: ModeLabel.values.map((ModeLabel mode) {
+                  return DropdownMenuItem<ModeLabel>(
+                    value: mode,
+                    child: Text(mode.label),
+                  );
+                }).toList(),
+                hint: const Text('Select Type'),
+                isExpanded: true,
+                autofocus: true,
+                alignment: Alignment.centerLeft,
+                style:  TextStyle(color: Color(0xFF1F2937),
+                  fontSize: 17.0,
+                ),
+
+
+
+              ),
+              const SizedBox(height: 20),
+
               TextField(
                 controller: _noteController,
                 cursorColor: Color(0xFF1F2937), // Set cursor color
-                decoration: const InputDecoration(
-                  labelText: 'Enter your note request',
+                decoration:  InputDecoration(
+                  labelText: 'Enter additional information',
                   labelStyle: TextStyle(
                     color: Color(0xFF1F2937), // Set label text color
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Color(0xFF1F2937), // Set border color
+                      color: Colors.grey.shade200, // Set border color
                     ),
+                    borderRadius: const BorderRadius.all(Radius.circular(7.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -63,10 +180,13 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 },
                 child: Text(
                   'Submit',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white,
+                  fontSize: 18.0,),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF1F2937),
+                  minimumSize: const Size(130, 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
               ),
             ],
@@ -92,17 +212,19 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Note Request Sent',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF1F2937), // Set text color
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.all(16.0),
+              //   child: Text(
+              //     'Note Request Sent',
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //       color: Color(0xFF1F2937), // Set text color
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
+              SizedBox(height: 16),
+
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
@@ -110,33 +232,30 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF1F2937), // Set text color
+                    fontSize: 17.0,
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 13),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Container(
-                  width: double.infinity,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Color(0xFF1F2937),
-                      // Set border color
-                    ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  side: const BorderSide(color: Color(0xFF1F2937)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Center(
-                    child: Text(
-                      'OK',
-                      style:
-                          TextStyle(color: Color(0xFF1F2937)), // Set text color
-                    ),
+                ),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Color(0xFF1F2937),
                   ),
                 ),
               ),
+
             ],
           ),
         );
