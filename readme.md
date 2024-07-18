@@ -163,8 +163,6 @@ Password - Demodemo#1
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-
-
 ## Our Valuable Contributors ✨❤️
 
 [![Contributors](https://contrib.rocks/image?repo=Yashshukla11/ExamTime_android)](https://github.com/Yashshukla11/ExamTime_android.git/graphs/contributors)
