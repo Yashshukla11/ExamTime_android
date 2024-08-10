@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+Widget CustomButton(
+  String title,
+  IconData icon,
+  VoidCallback onTap,
+  double screenWidth,
+  BuildContext context,
+) {
+  final ThemeData theme = Theme.of(context);
+  final Color primaryColor = theme.colorScheme.primary;
+  final Color secondaryColor = theme.colorScheme.secondary;
 
-Widget CustomButton(String title, IconData icon, VoidCallback onTap,
-    double screenWidth, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
     child: GestureDetector(
@@ -12,16 +20,20 @@ Widget CustomButton(String title, IconData icon, VoidCallback onTap,
         width: screenWidth * 0.90 - 30,
         height: 50,
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 129, 129, 129).withOpacity(0.1),
+          color: theme.colorScheme.background,
           borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [Colors.blue, Colors.red, Colors.green],
+          gradient: LinearGradient(
+            colors: [
+              primaryColor,
+              primaryColor.withOpacity(0.8), // Adjust opacity for gradient
+              primaryColor.withOpacity(0.6), // Adjust opacity for gradient
+            ],
           ),
         ),
         child: Row(
           children: [
             const SizedBox(width: 50),
-            Icon(icon, color: Theme.of(context).colorScheme.secondary),
+            Icon(icon, color: secondaryColor),
             const SizedBox(width: 30),
             Expanded(
               child: Text(
@@ -29,7 +41,7 @@ Widget CustomButton(String title, IconData icon, VoidCallback onTap,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: secondaryColor,
                   fontSize: 20,
                 ),
               ),

@@ -4,13 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:examtime/common_widget/custom_button.dart';
 import 'package:examtime/common_widget/emailWidget.dart';
 import 'package:examtime/services/ApiServices/api_services.dart.dart';
-import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/landing_screen/notification.dart';
-import 'package:examtime/screens/landing_screen/navbar.dart';
 import 'package:examtime/screens/landing_screen/drawer.dart';
+import 'package:examtime/screens/landing_screen/navbar.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/user.dart';
@@ -27,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = 'John Doe';
   String _email = 'john.doe@example.com';
   bool isEmail = true;
-   User ?  user;
+  User ?  user;
 
   void _editProfile() {
     showDialog(
@@ -75,8 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void fetchUserDetails()async{
     if(SharedServices.isLoggedIn()){
       Response res=await Apiservices.fetchUserData();
-       user=User.fromJson(jsonDecode(jsonEncode(res.data)));
-       setState(() {});
+      user=User.fromJson(jsonDecode(jsonEncode(res.data)));
+      setState(() {});
       //print(user.username);
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
@@ -108,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Stack(
                   children: [
-                     CircleAvatar(
+                    CircleAvatar(
                       radius: 100,
                       backgroundColor: Colors.yellow,
                       child: CircleAvatar(
@@ -137,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   user?.email??_email,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 16),

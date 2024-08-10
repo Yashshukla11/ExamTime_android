@@ -22,7 +22,7 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   List<Request> requestList = [];
   bool isLoading = true;
-  bool isScrolling=false;
+  bool isScrolling = false;
 
   @override
   void initState() {
@@ -37,77 +37,158 @@ class _NotificationPageState extends State<NotificationPage> {
         children: [
           isLoading
               ? const Center(
-            child: CircularProgressIndicator(
-              color: Colors.blue,
-              strokeWidth: 2,
-            ),
-          ) :requestList.isEmpty?const Center(
-            child: Text(
-              'You Have No Notifications  Thank you!!',
-              style: TextStyle(fontSize: 18,color: Colors.blueAccent,fontWeight: FontWeight.w400),
-              textAlign: TextAlign.center,
-            ),
-          ):
-          Column(
+                  child: CircularProgressIndicator(
+                    color: Colors.blue,
+                    strokeWidth: 2,
+                  ),
+                )
+              : requestList.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'You Have No Notifications Thank you!!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-          Text(
-            'You have ${requestList.length} new notifications',
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 22),
-          Expanded(
-            child: ListView.builder(
-              itemCount:isScrolling?requestList.length:(requestList.length>=4?4:requestList.length),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.black26,width: 2)
-                    )
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(toBeginningOfSentenceCase(requestList[requestList.length-index-1].description)??requestList[requestList.length-index-1].description,
-                          style: const TextStyle(color: Colors.black,fontSize: 18,overflow: TextOverflow.ellipsis,),maxLines: 3,),
-                      ),
-                      Text('@${requestList[requestList.length-index-1].author}',
-                        style: const TextStyle(color: Colors.black,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 3,),
-                    ],
-                  )
-                );
-              },
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: isScrolling?TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(fontSize: 18),
-              ),
-            ):TextButton(
-              onPressed: () {
-                setState(() {
-                  isScrolling=true;
-                });
-              },
-              child: const Text(
-                'View more...',
-                style: TextStyle(fontSize: 18,color: Colors.blue),
-              ),
-            ),
-          ),
+                        Container(
+                          color: Theme.of(context).colorScheme.background,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Stack(
+                                children: <Widget>[
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                            'Notifications',
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(
+                                            'You have ${requestList.length} new notifications',
+                                            style: TextStyle(fontSize: 14),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(
+                                            height: 22,
+                                          ),
+                                          Expanded(
+                                            child: ListView.builder(
+                                              itemCount: isScrolling
+                                                  ? requestList.length
+                                                  : (requestList.length >= 4
+                                                      ? 4
+                                                      : requestList.length),
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  width: MediaQuery.sizeOf(context).width,
+                                                  decoration: const BoxDecoration(
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Colors.black26,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(
+                                                      horizontal: 8, vertical: 20),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          toBeginningOfSentenceCase(
+                                                                  requestList[
+                                                                          requestList.length -
+                                                                              index -
+                                                                              1]
+                                                                      .description) ??
+                                                              requestList[
+                                                                      requestList.length -
+                                                                          index -
+                                                                          1]
+                                                                  .description,
+                                                          style: const TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                          maxLines: 3,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '@${requestList[
+                                                            requestList.length -
+                                                                index -
+                                                                1]
+                                                            .author}',
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                        maxLines: 3,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: isScrolling
+                                                ? TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: const Text(
+                                                      'Close',
+                                                      style: TextStyle(fontSize: 18),
+                                                    ),
+                                                  )
+                                                : TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        isScrolling = true;
+                                                      });
+                                                    },
+                                                    child: const Text(
+                                                      'View more...',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.blue,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
         ],

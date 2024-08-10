@@ -1,11 +1,13 @@
 import 'package:examtime/screens/discussion/discussion.dart';
 import 'dart:ui';
+import 'package:examtime/screens/profile/profile.dart';
 import 'package:examtime/model/user.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
+import 'package:examtime/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:examtime/screens/profile/profile.dart';
 import 'package:provider/provider.dart';
 import '../../helpers/ThemeProvider.dart';
+
 import '../auth_screen/signin.dart';
 import '../liked_notes/liked.dart';
 import '../request_notes/request.dart';
@@ -25,7 +27,7 @@ class AppDrawer extends StatelessWidget {
       },
       child: Drawer(
         width: media.width,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.background,
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 5.0,
@@ -41,9 +43,8 @@ class AppDrawer extends StatelessWidget {
               ),
               Container(
                 width: media.width * 0.70,
-                decoration: BoxDecoration(
-                  color: themeProvider.isDarkMode ? Colors.grey[850] : Colors.white,
-                ),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
@@ -73,7 +74,6 @@ class AppDrawer extends StatelessWidget {
                                     SharedServices.getLoginDetails()?.user?.username ?? 'user name',
                                     style: const TextStyle(
                                       fontSize: 20,
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -85,8 +85,7 @@ class AppDrawer extends StatelessWidget {
                         const SizedBox(
                           height: 15,
                         ),
-                        const Divider(
-                          color: Colors.black26,
+                        Divider(
                           height: 1,
                         ),
                         Expanded(
@@ -133,8 +132,20 @@ class AppDrawer extends StatelessWidget {
                                 height: 15,
                               ),
                               ListTile(
-                                leading: const Icon(Icons.logout),
-                                title: const Text('Logout'),
+
+                                leading: Icon(Icons.lightbulb),
+                                title: Text('Change Mode'),
+                                onTap: () {
+                              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.logout),
+                                title: Text('Logout'),
+
                                 onTap: () {
                                   SharedServices.logout(context);
                                   Navigator.pushNamed(context, LoginPage.routeName);
@@ -172,7 +183,6 @@ class AppDrawer extends StatelessWidget {
                           ),
                         ),
                         const Divider(
-                          color: Colors.black26,
                           height: 1,
                         ),
                         const SizedBox(
@@ -188,10 +198,10 @@ class AppDrawer extends StatelessWidget {
                                 const Text(
                                   "Switch Account",
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+
                                 ),
                                 Image.asset("assets/img/next.png", width: 18, height: 18),
                               ],

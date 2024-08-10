@@ -11,6 +11,7 @@ class RequestNotesPage extends StatefulWidget {
   @override
   _RequestNotesPageState createState() => _RequestNotesPageState();
 }
+
 enum SubLabel {
   DSA('DSA'),
   COA('COA'),
@@ -39,7 +40,6 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
   SubLabel? selectedSub = SubLabel.DSA;
   ModeLabel? selectedMode = ModeLabel.Printed;
 
-
   @override
   void dispose() {
     _noteController.dispose();
@@ -48,24 +48,21 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-  return WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, DashboardPage.routeName);
         return false;
       },
       child: Scaffold(
         appBar: CommonNavBar(),
-        drawer: AppDrawer(), // Use the CommonNavBar
+        drawer: AppDrawer(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 20.0,),
+              SizedBox(height: 20.0),
 
               Row(
                 children: [
@@ -76,8 +73,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                     style: TextStyle(
                       fontSize: 23.0,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F2937),
-
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ],
@@ -94,18 +90,17 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 items: SubLabel.values.map((SubLabel subject) {
                   return DropdownMenuItem<SubLabel>(
                     value: subject,
-                    child: Text(subject.label
-                    ),
+                    child: Text(subject.label),
                   );
                 }).toList(),
                 hint: const Text('Select Subject'),
                 isExpanded: true,
                 autofocus: true,
                 alignment: Alignment.centerLeft,
-                style:  TextStyle(
-                    color: Color(0xFF1F2937),
-
-                    fontSize: 17.0),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 17.0,
+                ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -117,9 +112,8 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                     style: TextStyle(
                       fontSize: 23.0,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F2937),
-
-                     ),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),
@@ -132,7 +126,6 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                     selectedMode = newValue;
                   });
                 },
-
                 items: ModeLabel.values.map((ModeLabel mode) {
                   return DropdownMenuItem<ModeLabel>(
                     value: mode,
@@ -143,32 +136,30 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 isExpanded: true,
                 autofocus: true,
                 alignment: Alignment.centerLeft,
-                style:  TextStyle(color: Color(0xFF1F2937),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: 17.0,
                 ),
-
-
-
               ),
               const SizedBox(height: 20),
 
               TextField(
                 controller: _noteController,
-                cursorColor: Color(0xFF1F2937), // Set cursor color
-                decoration:  InputDecoration(
+                cursorColor: Theme.of(context).colorScheme.secondary,
+                decoration: InputDecoration(
                   labelText: 'Enter additional information',
                   labelStyle: TextStyle(
-                    color: Color(0xFF1F2937), // Set label text color
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.grey.shade200, // Set border color
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(7.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Color(0xFF1F2937), // Set border color
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -180,11 +171,10 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 },
                 child: Text(
                   'Submit',
-                  style: TextStyle(color: Colors.white,
-                  fontSize: 18.0,),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF1F2937),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   minimumSize: const Size(130, 50),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
@@ -197,7 +187,6 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
   }
 
   void _submitNoteRequest(BuildContext context) {
-    // Add functionality to submit the note request
     _showNoteRequestSentDialog(context);
     _noteController.clear();
   }
@@ -207,31 +196,19 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Set background color to white
+          backgroundColor: Theme.of(context).colorScheme.background,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // const Padding(
-              //   padding: EdgeInsets.all(16.0),
-              //   child: Text(
-              //     'Note Request Sent',
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(
-              //       color: Color(0xFF1F2937), // Set text color
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              SizedBox(height: 16),
-
-              const Padding(
+              const SizedBox(height: 16),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
                   'Your note request has been sent successfully.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF1F2937), // Set text color
+                    color: Theme.of(context).colorScheme.secondary,
                     fontSize: 17.0,
                   ),
                 ),
@@ -243,7 +220,7 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                  side: const BorderSide(color: Color(0xFF1F2937)),
+                  side: BorderSide(color: Theme.of(context).colorScheme.secondary),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -251,11 +228,10 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 child: const Text(
                   'OK',
                   style: TextStyle(
-                    color: Color(0xFF1F2937),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
-
             ],
           ),
         );

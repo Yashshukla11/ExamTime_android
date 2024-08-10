@@ -1,17 +1,19 @@
-import 'package:examtime/screens/discussion/discussion.dart';
-import 'package:examtime/services/SharedServices/Preferences.dart';
-import 'package:examtime/services/SharedServices/Sharedservices.dart';
-import 'package:examtime/screens/request_notes/request.dart';
-import 'package:examtime/services/notification_service.dart';
-import 'package:flutter/material.dart';
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/liked_notes/liked.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:examtime/screens/auth_screen/signin.dart';
 import 'package:examtime/screens/auth_screen/signup.dart';
+import 'package:examtime/screens/discussion/discussion.dart';
+import 'package:examtime/screens/landing_screen/dashboard.dart';
+import 'package:examtime/screens/liked_notes/liked.dart';
 import 'package:examtime/screens/profile/profile.dart';
+import 'package:examtime/screens/request_notes/request.dart';
+import 'package:examtime/services/SharedServices/Preferences.dart';
+import 'package:examtime/services/SharedServices/Sharedservices.dart';
+import 'package:examtime/services/notification_service.dart';
+import 'package:examtime/theme/theme_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:examtime/screens/request_notes/request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:examtime/screens/auth_screen/otp.dart';
 import 'helpers/ThemeProvider.dart';
@@ -24,10 +26,11 @@ void main() async {
   await LocalNotificationService().init();
   preferences = await SharedPreferences.getInstance();
   runApp(
-      ChangeNotifierProvider(create: (context)=>ThemeProvider(),
-      child: const MyApp()
-      )
-  );
+
+    ChangeNotifierProvider(create: (context) => ThemeProvider(),
+    child: const MyApp(),
+    )
+    );
 }
 
 Future<void> backgroundHandler() async {
@@ -116,9 +119,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ExamTime',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: themeProvider.themeMode,
+      //themeMode: ThemeMode.system,
+      theme: Provider.of<ThemeProvider>(context).themeData,
+
       initialRoute: '/',
       routes: {
         '/': (context) => const LoadingScreen(),
@@ -186,7 +189,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _backgroundColorAnimation.value ?? Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

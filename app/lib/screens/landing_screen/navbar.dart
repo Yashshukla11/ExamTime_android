@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'dashboard.dart';
+import 'package:flutter/material.dart';
+
 import 'notification.dart';
 
 class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,11 +11,10 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
 
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: theme.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       centerTitle: true,
       title: Row(
         children: [
@@ -45,11 +43,29 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12.0),
-            child: IconButton(
-              icon: const Icon(
-                Icons.notifications,
-                color: Colors.white,
-                size: 32.0,
+            child: Container(
+              child: IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: 32.0,
+                ),
+                onPressed: () {
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(100, 100, 0, 0),
+                    // position where you want to show the menu
+                    items: [
+                      PopupMenuItem(
+                        child: Container(
+                          color: Theme.of(context).colorScheme.background,
+                          child: NotificationPage(),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+
               ),
               onPressed: () {
                 showMenu(
