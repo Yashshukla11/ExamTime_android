@@ -1,12 +1,12 @@
 import 'package:examtime/screens/discussion/discussion.dart';
 import 'dart:ui';
-
 import 'package:examtime/screens/profile/profile.dart';
 import 'package:examtime/model/user.dart';
 import 'package:examtime/services/SharedServices/Sharedservices.dart';
 import 'package:examtime/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../helpers/ThemeProvider.dart';
 
 import '../auth_screen/signin.dart';
 import '../liked_notes/liked.dart';
@@ -14,24 +14,37 @@ import '../request_notes/request.dart';
 import 'dashboard.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     var media = MediaQuery.of(context).size;
-    return Drawer(
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop(); // Close the drawer when tapping outside
+      },
+      child: Drawer(
         width: media.width,
         backgroundColor: Theme.of(context).colorScheme.background,
         child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 5.0,
-              sigmaY: 5,
-            ),
-            child: Stack(children: [
-              SizedBox(
-                height: media.width * 1,
+          filter: ImageFilter.blur(
+            sigmaX: 5.0,
+            sigmaY: 5,
+          ),
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: () {}, // Prevent tap events from closing the drawer when interacting with it
+                child: SizedBox(
+                  height: media.width * 1,
+                ),
               ),
               Container(
                 width: media.width * 0.70,
                 decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
@@ -49,9 +62,7 @@ class AppDrawer extends StatelessWidget {
                                   foregroundColor: Colors.transparent,
                                   child: ClipOval(
                                     child: Image.network(
-                                      SharedServices.getLoginDetails()
-                                              ?.user
-                                              ?.userPhoto ??
+                                      SharedServices.getLoginDetails()?.user?.userPhoto ??
                                           'https://i.postimg.cc/2SMLF3mb/man.png',
                                       fit: BoxFit.cover,
                                     ),
@@ -60,16 +71,13 @@ class AppDrawer extends StatelessWidget {
                                 const SizedBox(width: 20),
                                 Expanded(
                                   child: Text(
-                                    SharedServices.getLoginDetails()
-                                            ?.user
-                                            ?.username ??
-                                        'user name',
+                                    SharedServices.getLoginDetails()?.user?.username ?? 'user name',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -87,47 +95,44 @@ class AppDrawer extends StatelessWidget {
                                 leading: const Icon(Icons.home),
                                 title: const Text('Home'),
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, DashboardPage.routeName);
+                                  Navigator.pushNamed(context, DashboardPage.routeName);
                                 },
                               ),
                               const SizedBox(
                                 height: 15,
                               ),
                               ListTile(
-                                leading: Icon(Icons.account_circle),
+                                leading: const Icon(Icons.account_circle),
                                 title: const Text('My Profile'),
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, ProfileScreen.routeName);
+                                  Navigator.pushNamed(context, ProfileScreen.routeName);
                                 },
                               ),
                               const SizedBox(
                                 height: 15,
                               ),
                               ListTile(
-                                leading: Icon(Icons.favorite),
-                                title: Text('Liked Notes'),
+                                leading: const Icon(Icons.favorite),
+                                title: const Text('Liked Notes'),
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, LikedNotesPage.routeName);
+                                  Navigator.pushNamed(context, LikedNotesPage.routeName);
                                 },
                               ),
                               const SizedBox(
                                 height: 15,
                               ),
                               ListTile(
-                                leading: Icon(Icons.request_page),
-                                title: Text('Request Notes'),
+                                leading: const Icon(Icons.request_page),
+                                title: const Text('Request Notes'),
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, RequestNotesPage.routeName);
+                                  Navigator.pushNamed(context, RequestNotesPage.routeName);
                                 },
                               ),
                               const SizedBox(
                                 height: 15,
                               ),
                               ListTile(
+
                                 leading: Icon(Icons.lightbulb),
                                 title: Text('Change Mode'),
                                 onTap: () {
@@ -140,19 +145,40 @@ class AppDrawer extends StatelessWidget {
                               ListTile(
                                 leading: Icon(Icons.logout),
                                 title: Text('Logout'),
+
                                 onTap: () {
                                   SharedServices.logout(context);
-                                  Navigator.pushNamed(
-                                      context, LoginPage.routeName);
+                                  Navigator.pushNamed(context, LoginPage.routeName);
                                 },
                               ),
-                               ListTile(
-            leading: Icon(Icons.forum),
-            title: Text('Discuss'),
-            onTap: () {
-              Navigator.pushNamed(context, DiscussionPage.routeName);
-            },
-          ),
+                              ListTile(
+                                leading: const Icon(Icons.forum),
+                                title: const Text('Discuss'),
+                                onTap: () {
+                                  Navigator.pushNamed(context, DiscussionPage.routeName);
+                                },
+                              ),
+                              const SizedBox(height: 10,),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Row(
+                                  children: [
+                                    Switch(
+                                      value: themeProvider.isDarkMode,
+                                      onChanged: (value) {
+                                        themeProvider.toggleTheme(value);
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      themeProvider.isDarkMode ? "Dark mode" : "Light mode",
+                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -164,19 +190,20 @@ class AppDrawer extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {},
-                          child: Container(
+                          child: SizedBox(
                             height: kTextTabBarHeight,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   "Switch Account",
                                   style: TextStyle(
+
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700),
+
                                 ),
-                                Image.asset("assets/img/next.png",
-                                    width: 18, height: 18)
+                                Image.asset("assets/img/next.png", width: 18, height: 18),
                               ],
                             ),
                           ),
@@ -186,11 +213,10 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              ],
-            ),
+            ],
           ),
-         
-      
-              );
+        ),
+      ),
+    );
   }
 }

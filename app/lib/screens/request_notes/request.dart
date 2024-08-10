@@ -1,7 +1,7 @@
-import 'package:examtime/screens/landing_screen/dashboard.dart';
-import 'package:examtime/screens/landing_screen/drawer.dart';
-import 'package:examtime/screens/landing_screen/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:examtime/screens/landing_screen/dashboard.dart';
+import 'package:examtime/screens/landing_screen/navbar.dart';
+import 'package:examtime/screens/landing_screen/drawer.dart';
 
 class RequestNotesPage extends StatefulWidget {
   static const String routeName = '/request_notes';
@@ -12,8 +12,33 @@ class RequestNotesPage extends StatefulWidget {
   _RequestNotesPageState createState() => _RequestNotesPageState();
 }
 
+enum SubLabel {
+  DSA('DSA'),
+  COA('COA'),
+  C('C'),
+  Cpp('C++'),
+  Java('Java'),
+  DS('Distributed Systems'),
+  CN('Computer Networks'),
+  DBMS('DBMS'),
+  ML('Machine Learning'),
+  OS('Operating System');
+
+  final String label;
+  const SubLabel(this.label);
+}
+
+enum ModeLabel {
+  Printed('Printed'),
+  Handwritten('Handwritten');
+  final String label;
+  const ModeLabel(this.label);
+}
+
 class _RequestNotesPageState extends State<RequestNotesPage> {
   final TextEditingController _noteController = TextEditingController();
+  SubLabel? selectedSub = SubLabel.DSA;
+  ModeLabel? selectedMode = ModeLabel.Printed;
 
   @override
   void dispose() {
@@ -30,26 +55,111 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
       },
       child: Scaffold(
         appBar: CommonNavBar(),
-        drawer: AppDrawer(), // Use the CommonNavBar
+        drawer: AppDrawer(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 20.0),
+
+              Row(
+                children: [
+                  Icon(Icons.book, size: 30.0,),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Subject',
+                    style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              DropdownButtonFormField<SubLabel>(
+                value: selectedSub,
+                onChanged: (SubLabel? newValue) {
+                  setState(() {
+                    selectedSub = newValue;
+                  });
+                },
+                items: SubLabel.values.map((SubLabel subject) {
+                  return DropdownMenuItem<SubLabel>(
+                    value: subject,
+                    child: Text(subject.label),
+                  );
+                }).toList(),
+                hint: const Text('Select Subject'),
+                isExpanded: true,
+                autofocus: true,
+                alignment: Alignment.centerLeft,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 17.0,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(Icons.description, size: 30.0,),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Type',
+                    style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              DropdownButtonFormField<ModeLabel>(
+                value: selectedMode,
+                onChanged: (ModeLabel? newValue) {
+                  setState(() {
+                    selectedMode = newValue;
+                  });
+                },
+                items: ModeLabel.values.map((ModeLabel mode) {
+                  return DropdownMenuItem<ModeLabel>(
+                    value: mode,
+                    child: Text(mode.label),
+                  );
+                }).toList(),
+                hint: const Text('Select Type'),
+                isExpanded: true,
+                autofocus: true,
+                alignment: Alignment.centerLeft,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 17.0,
+                ),
+              ),
+              const SizedBox(height: 20),
+
               TextField(
                 controller: _noteController,
-                cursorColor: Theme.of(context).colorScheme.secondary, // Set cursor color
+                cursorColor: Theme.of(context).colorScheme.secondary,
                 decoration: InputDecoration(
-                  labelText: 'Enter your note request',
-                  labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  labelText: 'Enter additional information',
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary, // Set border color
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
+                    borderRadius: const BorderRadius.all(Radius.circular(7.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary, // Set border color
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -61,10 +171,12 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
                 },
                 child: Text(
                   'Submit',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
+                  minimumSize: const Size(130, 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
               ),
             ],
@@ -75,7 +187,6 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
   }
 
   void _submitNoteRequest(BuildContext context) {
-    // Add functionality to submit the note request
     _showNoteRequestSentDialog(context);
     _noteController.clear();
   }
@@ -85,57 +196,43 @@ class _RequestNotesPageState extends State<RequestNotesPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.background, 
+          backgroundColor: Theme.of(context).colorScheme.background,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-               Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Note Request Sent',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary, // Set text color
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-               Padding(
+              const SizedBox(height: 16),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: 
-                Text(
+                child: Text(
                   'Your note request has been sent successfully.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color:Theme.of(context).colorScheme.secondary, // Set text color
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 17.0,
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 13),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Container(
-                  width: double.infinity,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary,
-                      // Set border color
-                    ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  side: BorderSide(color: Theme.of(context).colorScheme.secondary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Center(
-                    child: Text(
-                      'OK',
-                      style:
-                          TextStyle(color: Theme.of(context).colorScheme.secondary)
+                ),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
-          )],
+            ],
           ),
         );
       },

@@ -21,7 +21,7 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.menu,
                 color: Colors.white,
                 size: 32.0,
@@ -65,7 +65,27 @@ class CommonNavBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   );
                 },
+
               ),
+              onPressed: () {
+                showMenu(
+                  context: context,
+                  constraints: const BoxConstraints(minWidth:200),
+                  position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+                  // position where you want to show the menu
+                  items: [
+                    PopupMenuItem(
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        height: MediaQuery.sizeOf(context).height*0.4,
+                        color: Colors.white,
+                        // Set the background color to white
+                        child: const NotificationPage(),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],
