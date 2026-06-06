@@ -164,11 +164,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 10.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
+                      // Navigation Removes all routes from the stack and pushes the new route to the screen.
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-
                           builder: (context) => LoginPage(),
                         ),
+                        (route) => false,
                       );
                     },
                     child: const Text(
